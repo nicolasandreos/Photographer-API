@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "postinstall": "prisma generate",
+    "db:seed": "prisma db seed",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Nicolas Andreos",
