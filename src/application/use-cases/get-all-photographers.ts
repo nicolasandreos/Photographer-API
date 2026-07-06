@@ -1,3 +1,4 @@
+import { GetAllPhotographersResponse } from "../../api/dto/response/photographer/get-all";
 import { IPhotographerRepository } from "../../domain/repositories/photographer";
 
 export class GetAllPhotographersUseCase {
@@ -5,9 +6,17 @@ export class GetAllPhotographersUseCase {
         private repository: IPhotographerRepository
     ) {}
 
-    async execute() {
-        const photographers = await this.repository.getAll();
-        return photographers;
+    async execute(): Promise<GetAllPhotographersResponse[]> {
+        const photographersEntities = await this.repository.getAll();
+        const photographersDTO = photographersEntities.map((photographer) => 
+            new GetAllPhotographersResponse(
+                photographer.getId(), 
+                photographer.getName(), 
+                photographer.getEmail(), 
+                photographer.getEmailVerified()
+            )
+        );
+        return photographersDTO;
     }
 
 }
