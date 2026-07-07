@@ -1,11 +1,9 @@
 import { createApp } from "./api/app";
+import { createPhotographerController } from "./api/controllers/photographer.controller";
 import { createPhotographerRouter } from "./api/routes/photographer.routes";
-import { GetAllPhotographersUseCase } from "./application/use-cases/get-all-photographers";
-import { PrismaPhotographerRepository } from "./infra/repositories/prisma-photographer";
 
-const repository = new PrismaPhotographerRepository()
-const getAllPhotographersUseCase = new GetAllPhotographersUseCase(repository)
-const photographerRouter = createPhotographerRouter(getAllPhotographersUseCase)
+const photographerController = createPhotographerController();
+const photographerRouter = createPhotographerRouter(photographerController)
 
 const app = createApp(photographerRouter);
 

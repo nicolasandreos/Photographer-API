@@ -5,13 +5,10 @@ export const createApp = (
 ) => {
     const app = express();
     app.use(express.json());
-
     app.get("/status", (req, res) => {
         res.status(200).json({ status: "OK"});
     })
-
     app.use("/photographer", photographerRouter);
-
     return app;
 
 }
