@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { GetAllPhotographersUseCase } from "../../application/use-cases/get-all-photographers";
 import { PrismaPhotographerRepository } from "../../infra/repositories/prisma-photographer";
+import { GetAllPhotographersResponse } from "../dto/response/photographer/get-all";
 
 export const createPhotographerController = () => {
     const repository = new PrismaPhotographerRepository();
@@ -17,8 +18,16 @@ export class PhotographerController {
 
     getAll = async (req: Request, res: Response) => {
         try {
-            const photographers = await this.getAllPhotographers.execute();
-            res.status(200).json(photographers);
+            const photographersEntities = await this.getAllPhotographers.execute();
+            const photographersDTO = photographersEntities.map((photographer) => 
+                new GetAllPhotographersResponse(
+                    photographer.getId(), 
+                    photographer.getName(), 
+                    photographer.getEmail(), 
+                    photographer.getEmailVerified()
+                )
+            );
+            res.status(200).json(photographersDTO);
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: "Internal server error" });
