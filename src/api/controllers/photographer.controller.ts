@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { GetAllPhotographersUseCase } from "../../application/use-cases/get-all-photographers";
-import { PrismaPhotographerRepository } from "../../infra/repositories/prisma-photographer";
+import { PrismaPhotographerRepository } from "../../infra/adapters/prisma-photographer";
 import { GetAllPhotographersResponse } from "../dto/response/photographer/get-all";
 
 export const createPhotographerController = () => {
