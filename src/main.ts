@@ -1,8 +1,10 @@
 import { createApp } from "./api/app";
-import { createPhotographerController } from "./api/controllers/photographer.controller";
+import { PhotographerController } from "./api/controllers/photographer.controller";
 import { createPhotographerRouter } from "./api/routes/photographer.routes";
+import { PhotographerUseCasesFactory } from "./infra/factories/photographer-use-cases.factory";
 
-const photographerController = createPhotographerController();
+const photographerUseCasesFactory = new PhotographerUseCasesFactory();
+const photographerController = new PhotographerController(photographerUseCasesFactory);
 const photographerRouter = createPhotographerRouter(photographerController)
 
 const app = createApp(photographerRouter);
