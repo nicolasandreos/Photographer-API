@@ -11,16 +11,30 @@ export const swaggerSpec = swaggerJsdoc({
         },
         servers: [{ url: `http://localhost:${port}` }],
         paths: {
-            "/status": {
-                get: {
-                    responses: { "200": { description: "" } },
-                },
-            },
             "/photographer/all": {
                 get: {
+                    summary: "Get all photographers",
                     responses: {
-                        "200": { description: "" },
-                        "500": { description: "" },
+                        "200": { description: "Photographers found" },
+                        "500": { description: "Internal server error" },
+                    },
+                },
+            },
+            "/photographer/{id}": {
+                get: {
+                    summary: "Get photographer by id",
+                    parameters: [
+                        {
+                            name: "id",
+                            in: "path",
+                            required: true,
+                            schema: { type: "string" },
+                        },
+                    ],
+                    responses: {
+                        "200": { description: "Photographer found" },
+                        "404": { description: "Photographer not found" },
+                        "500": { description: "Internal server error" },
                     },
                 },
             },

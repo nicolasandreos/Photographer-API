@@ -5,6 +5,9 @@ export const createPhotographerRouter = (
     controller: PhotographerController,
 ): Router => {
     const router = Router();
+
     router.get("/all", controller.getAll);
+    router.get("/:id", controller.getById);
+
     return router;
 }

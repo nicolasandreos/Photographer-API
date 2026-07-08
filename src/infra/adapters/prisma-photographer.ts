@@ -12,4 +12,13 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
 
     return entityPhotographers;
   }
+
+  async getById(id: string): Promise<PhotographerEntity | null> {
+    const databasePhotographer = await db.photographer.findUnique({
+      where: {
+        id: id
+      }
+    })
+    return databasePhotographer ? PhotographerMapper.toEntity(databasePhotographer) : null;
+  }
 }
