@@ -37,6 +37,40 @@ export const swaggerSpec = swaggerJsdoc({
                         "500": { description: "Internal server error" },
                     },
                 },
+
+                put: {
+                    summary: "Update a photographer",
+                    parameters: [
+                        {
+                            name: "id",
+                            in: "path",
+                            required: true,
+                            schema: { type: "string" },
+                        },
+                    ],
+                    requestBody: {
+                        required: true,
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        name: { type: "string" },
+                                        email: { type: "string" },
+                                        phoneNumber: { type: "string" },
+                                        studioName: { type: "string", nullable: true },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        "200": { description: "Photographer updated" },
+                        "400": { description: "Bad request" },
+                        "404": { description: "Photographer not found" },
+                        "500": { description: "Internal server error" },
+                    },
+                },
             },
             "/photographer/create": {
                 post: {

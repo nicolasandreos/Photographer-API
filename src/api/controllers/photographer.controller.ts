@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { PhotographerUseCasesFactory } from "../../infra/factories/photographer-use-cases.factory";
 import { PhotographerMapperDTO } from "../mappers/photographer-mapper";
 import { createPhotographerRequestSchema } from "../dto/request/photographer/create";
+import { updatePhotographerRequestSchema } from "../dto/request/photographer/update";
 
 export class PhotographerController {
     constructor(
@@ -26,5 +27,13 @@ export class PhotographerController {
         const newPhotographerEntity = await this.useCases.createPhotographerUseCase.execute(request);
         const newPhotographerDTO = PhotographerMapperDTO.toCreateResponseDTO(newPhotographerEntity);
         res.status(201).json(newPhotographerDTO);
+    }
+
+    update = async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const request = updatePhotographerRequestSchema.parse(req.body);
+        const updatedPhotographerEntity = await this.useCases.updatePhotographerUseCase.execute(String(id), request);
+        const updatedPhotographerDTO = PhotographerMapperDTO.toUpdateResponseDTO(updatedPhotographerEntity);
+        res.status(200).json(updatedPhotographerDTO);
     }
 }

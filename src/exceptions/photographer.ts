@@ -17,3 +17,9 @@ export class PhotographerCreationFailedException extends BaseApiException {
         super("Photographer creation failed", 500);
     }
 }
+
+export class PhotographerEmailAlreadyExistsException extends BaseApiException {
+    constructor() {
+        super("Photographer email already exists", 409);
+    }
+}

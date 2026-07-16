@@ -9,6 +9,7 @@ export const createPhotographerRouter = (
     router.get("/all", controller.getAll);
     router.get("/:id", controller.getById);
     router.post("/create", controller.create);
+    router.put("/:id", controller.update);
 
     return router;
 }
