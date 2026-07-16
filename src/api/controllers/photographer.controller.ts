@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { PhotographerUseCasesFactory } from "../../infra/factories/photographer-use-cases.factory";
 import { PhotographerMapperDTO } from "../mappers/photographer-mapper";
-import { CreatePhotographerRequestDTO } from "../dto/response/request/photographer/create";
+import { CreatePhotographerRequestDTO } from "../dto/request/photographer/create";
 
 export class PhotographerController {
     constructor(

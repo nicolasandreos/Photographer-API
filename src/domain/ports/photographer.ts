@@ -1,5 +1,5 @@
 import { PhotographerEntity } from "../entities/photographer";
-import { CreatePhotographerRequestDTO } from "../../api/dto/response/request/photographer/create";
+import { CreatePhotographerRequestDTO } from "../../api/dto/request/photographer/create";
 
 export interface IPhotographerRepository {
     getAll: () => Promise<PhotographerEntity[]>;

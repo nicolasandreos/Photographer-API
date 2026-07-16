@@ -1,4 +1,4 @@
-import { CreatePhotographerRequestDTO } from "../../api/dto/response/request/photographer/create";
+import { CreatePhotographerRequestDTO } from "../../api/dto/request/photographer/create";
 import { PhotographerEntity } from "../../domain/entities/photographer";
 import { IPhotographerRepository } from "../../domain/ports/photographer";
 import { db } from "../database/client";
