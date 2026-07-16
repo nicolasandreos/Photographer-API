@@ -38,6 +38,34 @@ export const swaggerSpec = swaggerJsdoc({
                     },
                 },
             },
+            "/photographer/create": {
+                post: {
+                    summary: "Create a new photographer",
+                    requestBody: {
+                        required: true,
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        name: { type: "string" },
+                                        email: { type: "string" },
+                                        password: { type: "string" },
+                                        phoneNumber: { type: "string" },
+                                        studioName: { type: "string", nullable: true },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        "201": { description: "Photographer created" },
+                        "400": { description: "Bad request" },
+                        "409": { description: "Photographer already exists" },
+                        "500": { description: "Internal server error" },
+                    },
+                },
+            },
         },
     },
     apis: [],

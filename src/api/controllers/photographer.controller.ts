@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import { GetAllPhotographersResponseDTO } from "../dto/response/photographer/get-all";
-import { GetByIdPhotographerResponseDTO  } from "../dto/response/photographer/get-by-id";
 import { PhotographerUseCasesFactory } from "../../infra/factories/photographer-use-cases.factory";
 import { PhotographerMapperDTO } from "../mappers/photographer-mapper";
+import { CreatePhotographerRequestDTO } from "../dto/response/request/photographer/create";
 
 export class PhotographerController {
     constructor(
@@ -20,5 +19,12 @@ export class PhotographerController {
         const photographerEntity = await this.useCases.getByIdPhotographerUseCase.execute(String(id));
         const photographerDTO = PhotographerMapperDTO.toGetByIdResponseDTO(photographerEntity);
         res.status(200).json(photographerDTO);
+    }
+
+    create = async (req: Request, res: Response) => {
+        const { name, email, password, phoneNumber, studioName } = req.body;
+        const newPhotographerEntity = await this.useCases.createPhotographerUseCase.execute(new CreatePhotographerRequestDTO(name, email, password, phoneNumber, studioName));
+        const newPhotographerDTO = PhotographerMapperDTO.toCreateResponseDTO(newPhotographerEntity);
+        res.status(201).json(newPhotographerDTO);
     }
 }

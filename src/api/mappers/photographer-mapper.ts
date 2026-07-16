@@ -1,4 +1,5 @@
 import { PhotographerEntity } from "../../domain/entities/photographer";
+import { CreatePhotographerResponseDTO } from "../dto/response/photographer/create";
 import { GetAllPhotographersResponseDTO } from "../dto/response/photographer/get-all";
 import { GetByIdPhotographerResponseDTO } from "../dto/response/photographer/get-by-id";
 
@@ -16,6 +17,18 @@ export class PhotographerMapperDTO {
 
     static toGetByIdResponseDTO(photographerEntity: PhotographerEntity): GetByIdPhotographerResponseDTO {
         return new GetByIdPhotographerResponseDTO(
+            photographerEntity.getId(),
+            photographerEntity.getName(),
+            photographerEntity.getEmail(),
+            photographerEntity.getPhoneNumber(),
+            photographerEntity.getStudioName(),
+            photographerEntity.getIsActive(),
+            photographerEntity.getEmailVerified()
+        );
+    }
+
+    static toCreateResponseDTO(photographerEntity: PhotographerEntity): CreatePhotographerResponseDTO {
+        return new CreatePhotographerResponseDTO(
             photographerEntity.getId(),
             photographerEntity.getName(),
             photographerEntity.getEmail(),

@@ -1,3 +1,4 @@
+import { CreatePhotographerUseCase } from "../../application/use-cases/create-photographer";
 import { GetAllPhotographersUseCase } from "../../application/use-cases/get-all-photographers";
 import { GetByIdPhotographerUseCase } from "../../application/use-cases/get-id-photographer";
 import { IPhotographerRepository } from "../../domain/ports/photographer";
@@ -8,4 +9,5 @@ export class PhotographerUseCasesFactory {
 
     getAllPhotographersUseCase = new GetAllPhotographersUseCase(this.repository);
     getByIdPhotographerUseCase = new GetByIdPhotographerUseCase(this.repository);
+    createPhotographerUseCase = new CreatePhotographerUseCase(this.repository);
 }
