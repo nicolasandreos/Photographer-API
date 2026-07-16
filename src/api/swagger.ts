@@ -71,6 +71,22 @@ export const swaggerSpec = swaggerJsdoc({
                         "500": { description: "Internal server error" },
                     },
                 },
+                delete: {
+                    summary: "Delete a photographer",
+                    parameters: [
+                        {
+                            name: "id",
+                            in: "path",
+                            required: true,
+                            schema: { type: "string" },
+                        },
+                    ],
+                    responses: {
+                        "204": { description: "Photographer deleted" },
+                        "404": { description: "Photographer not found" },
+                        "500": { description: "Internal server error" },
+                    },
+                },
             },
             "/photographer/create": {
                 post: {

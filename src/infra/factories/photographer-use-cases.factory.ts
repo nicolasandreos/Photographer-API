@@ -1,4 +1,5 @@
 import { CreatePhotographerUseCase } from "../../application/use-cases/create-photographer";
+import { DeletePhotographerUseCase } from "../../application/use-cases/delete-photographer";
 import { GetAllPhotographersUseCase } from "../../application/use-cases/get-all-photographers";
 import { GetByIdPhotographerUseCase } from "../../application/use-cases/get-id-photographer";
 import { UpdatePhotographerUseCase } from "../../application/use-cases/update-photographer";
@@ -12,4 +13,5 @@ export class PhotographerUseCasesFactory {
     getByIdPhotographerUseCase = new GetByIdPhotographerUseCase(this.repository);
     createPhotographerUseCase = new CreatePhotographerUseCase(this.repository);
     updatePhotographerUseCase = new UpdatePhotographerUseCase(this.repository);
+    deletePhotographerUseCase = new DeletePhotographerUseCase(this.repository);
 }

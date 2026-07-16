@@ -8,4 +8,5 @@ export interface IPhotographerRepository {
     create: (photographer: CreatePhotographerRequestDTO) => Promise<PhotographerEntity>;
     getByEmail: (email: string) => Promise<PhotographerEntity | null>;
     update: (id: string, photographer: UpdatePhotographerRequestDTO) => Promise<PhotographerEntity>;
+    delete: (id: string) => Promise<void>;
 }

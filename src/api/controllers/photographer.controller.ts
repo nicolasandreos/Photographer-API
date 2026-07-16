@@ -36,4 +36,10 @@ export class PhotographerController {
         const updatedPhotographerDTO = PhotographerMapperDTO.toUpdateResponseDTO(updatedPhotographerEntity);
         res.status(200).json(updatedPhotographerDTO);
     }
+
+    delete = async (req: Request, res: Response) => {
+        const { id } = req.params;
+        await this.useCases.deletePhotographerUseCase.execute(String(id));
+        res.status(204).send();
+    }
 }

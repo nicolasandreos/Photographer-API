@@ -70,4 +70,12 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
     
     return PhotographerMapperRepository.toEntity(updatedPhotographer);
   }
+
+  async delete(id: string): Promise<void> {
+    await db.photographer.delete({
+      where: {
+        id
+      }
+    })
+  }
 }
