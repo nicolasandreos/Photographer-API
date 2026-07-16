@@ -5,9 +5,13 @@ import {
   PhotographerAlreadyExistsException,
   PhotographerCreationFailedException,
 } from "../../exceptions/photographer";
+import { IPasswordService } from "../ports/password-service";
 
 export class CreatePhotographerUseCase {
-  constructor(private readonly repository: IPhotographerRepository) {}
+  constructor(
+    private readonly repository: IPhotographerRepository,
+    private readonly passwordService: IPasswordService
+  ) {}
 
   async execute(
     photographer: CreatePhotographerRequestDTO,
@@ -19,10 +23,12 @@ export class CreatePhotographerUseCase {
       throw new PhotographerAlreadyExistsException();
     }
 
+    const hashedPassword = await this.passwordService.hash(photographer.password);
+
     const photographerEntity = new PhotographerEntity({
       name: photographer.name,
       email: photographer.email,
-      passwordHash: photographer.password,
+      passwordHash: hashedPassword,
       phoneNumber: photographer.phoneNumber,
       studioName: photographer.studioName,
     });
