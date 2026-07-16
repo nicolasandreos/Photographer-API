@@ -1,5 +1,5 @@
 import { PhotographerEntity } from "../../domain/entities/photographer";
-import { IPhotographerRepository } from "../../domain/ports/photographer";
+import { IPhotographerRepository } from "../../domain/repositories/photographer";
 import { db } from "../database/client";
 import { PhotographerMapperRepository } from "../mappers/photographer-mapper";
 
@@ -24,9 +24,7 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
       : null;
   }
 
-  async create(
-    photographer: PhotographerEntity,
-  ): Promise<PhotographerEntity> {
+  async create(photographer: PhotographerEntity): Promise<PhotographerEntity> {
     const databasePhotographer = await db.photographer.create({
       data: {
         name: photographer.getName(),
@@ -42,10 +40,10 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
   async getByEmail(email: string): Promise<PhotographerEntity | null> {
     const databasePhotographer = await db.photographer.findUnique({
       where: {
-        email
-      }
-    })
-    
+        email,
+      },
+    });
+
     if (!databasePhotographer) {
       return null;
     }
@@ -53,27 +51,30 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
     return PhotographerMapperRepository.toEntity(databasePhotographer);
   }
 
-  async update(id: string, photographer: PhotographerEntity): Promise<PhotographerEntity> {
+  async update(
+    id: string,
+    photographer: PhotographerEntity,
+  ): Promise<PhotographerEntity> {
     const updatedPhotographer = await db.photographer.update({
       where: {
-        id
+        id,
       },
       data: {
         name: photographer.getName(),
         email: photographer.getEmail(),
         phoneNumber: photographer.getPhoneNumber(),
         studioName: photographer.getStudioName(),
-      }
-    })
-    
+      },
+    });
+
     return PhotographerMapperRepository.toEntity(updatedPhotographer);
   }
 
   async delete(id: string): Promise<void> {
     await db.photographer.delete({
       where: {
-        id
-      }
-    })
+        id,
+      },
+    });
   }
 }
