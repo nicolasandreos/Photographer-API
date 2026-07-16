@@ -14,11 +14,19 @@ export class CreatePhotographerUseCase {
             throw new PhotographerAlreadyExistsException();
         }
 
-        const newPhotographerEntity = await this.repository.create(photographer);
-        if (!newPhotographerEntity) {
+        const photographerEntity = new PhotographerEntity({
+            name: photographer.name,
+            email: photographer.email,
+            passwordHash: photographer.password,
+            phoneNumber: photographer.phoneNumber,
+            studioName: photographer.studioName,
+        });
+
+        const createdPhotographerEntity = await this.repository.create(photographerEntity);
+        if (!createdPhotographerEntity) {
             throw new PhotographerCreationFailedException();
         }
 
-        return newPhotographerEntity;
+        return createdPhotographerEntity;
     }
 }

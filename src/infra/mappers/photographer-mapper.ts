@@ -3,15 +3,13 @@ import { PhotographerEntity } from "../../domain/entities/photographer";
 
 export class PhotographerMapperRepository {
   static toEntity(photographer: Photographer): PhotographerEntity {
-    return new PhotographerEntity(
-      photographer.id,
-      photographer.name,
-      photographer.email,
-      photographer.passwordHash,
-      photographer.phoneNumber,
-      photographer.studioName,
-      photographer.isActive,
-      photographer.emailVerified,
-    );
+    return new PhotographerEntity({
+      id: photographer.id,
+      name: photographer.name,
+      email: photographer.email,
+      passwordHash: photographer.passwordHash,
+      phoneNumber: photographer.phoneNumber,
+      studioName: photographer.studioName ?? undefined,
+    });
   }
 }

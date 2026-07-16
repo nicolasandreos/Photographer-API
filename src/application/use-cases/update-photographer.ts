@@ -22,8 +22,18 @@ export class UpdatePhotographerUseCase {
                 throw new PhotographerEmailAlreadyExistsException();
             }
         }
+
+        const photographerEntity = new PhotographerEntity(
+            {
+                id: existingPhotographer.getId(),
+                name: photographer.name ?? undefined,
+                email: photographer.email ?? undefined,
+                phoneNumber: photographer.phoneNumber ?? undefined,
+                studioName: photographer.studioName ?? undefined,
+            }
+        );
         
-        const updatedPhotographer = await this.photographerRepository.update(id, photographer);
+        const updatedPhotographer = await this.photographerRepository.update(id, photographerEntity);
         return updatedPhotographer;
     }
 }

@@ -1,5 +1,3 @@
-import { CreatePhotographerRequestDTO } from "../../api/dto/request/photographer/create";
-import { UpdatePhotographerRequestDTO } from "../../api/dto/request/photographer/update";
 import { PhotographerEntity } from "../../domain/entities/photographer";
 import { IPhotographerRepository } from "../../domain/ports/photographer";
 import { db } from "../database/client";
@@ -27,15 +25,15 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
   }
 
   async create(
-    photographer: CreatePhotographerRequestDTO,
+    photographer: PhotographerEntity,
   ): Promise<PhotographerEntity> {
     const databasePhotographer = await db.photographer.create({
       data: {
-        name: photographer.name,
-        email: photographer.email,
-        passwordHash: photographer.password,
-        phoneNumber: photographer.phoneNumber,
-        studioName: photographer.studioName,
+        name: photographer.getName(),
+        email: photographer.getEmail(),
+        passwordHash: photographer.getPasswordHash(),
+        phoneNumber: photographer.getPhoneNumber(),
+        studioName: photographer.getStudioName(),
       },
     });
     return PhotographerMapperRepository.toEntity(databasePhotographer);
@@ -55,16 +53,16 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
     return PhotographerMapperRepository.toEntity(databasePhotographer);
   }
 
-  async update(id: string, photographer: UpdatePhotographerRequestDTO): Promise<PhotographerEntity> {
+  async update(id: string, photographer: PhotographerEntity): Promise<PhotographerEntity> {
     const updatedPhotographer = await db.photographer.update({
       where: {
         id
       },
       data: {
-        name: photographer.name ?? undefined,
-        email: photographer.email ?? undefined,
-        phoneNumber: photographer.phoneNumber ?? undefined,
-        studioName: photographer.studioName ?? undefined,
+        name: photographer.getName(),
+        email: photographer.getEmail(),
+        phoneNumber: photographer.getPhoneNumber(),
+        studioName: photographer.getStudioName(),
       }
     })
     

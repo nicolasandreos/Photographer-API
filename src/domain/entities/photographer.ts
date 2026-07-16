@@ -1,45 +1,49 @@
+interface PhotographerEntityProps {
+    id?: string;
+    name?: string;
+    email?: string;
+    passwordHash?: string;
+    phoneNumber?: string;
+    studioName?: string;
+    isActive?: boolean;
+    emailVerified?: boolean;
+}
+
 export class PhotographerEntity {
     constructor(
-        private readonly id: string,
-        private readonly name: string,
-        private readonly email: string,
-        private readonly passwordHash: string,
-        private readonly phoneNumber: string,
-        private readonly studioName: string | null,
-        private readonly isActive: boolean,
-        private readonly emailVerified: boolean,
+        private readonly props: PhotographerEntityProps
     ) { }
 
-    public getId(): string {
-        return this.id;
+    public getId(): string | undefined {
+        return this.props.id;
     }
 
-    public getName(): string {
-        return this.name;
+    public getName(): string | undefined {
+        return this.props.name;
     }
 
-    public getEmail(): string {
-        return this.email;
+    public getEmail(): string | undefined {
+        return this.props.email;
     }
 
-    public getPasswordHash(): string {
-        return this.passwordHash;
+    public getPasswordHash(): string | undefined {
+        return this.props.passwordHash;
     }
 
-    public getPhoneNumber(): string {
-        return this.phoneNumber;
+    public getPhoneNumber(): string | undefined {
+        return this.props.phoneNumber;
     }
 
-    public getStudioName(): string | null {
-        return this.studioName;
+    public getStudioName(): string | undefined {
+        return this.props.studioName;
     }
     
-    public getIsActive(): boolean {
-        return this.isActive;
+    public getIsActive(): boolean | undefined {
+        return this.props.isActive;
     }
 
-    public getEmailVerified(): boolean {
-        return this.emailVerified;
+    public getEmailVerified(): boolean | undefined {
+        return this.props.emailVerified;
     }
 }
 
