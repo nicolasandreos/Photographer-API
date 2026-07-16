@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { PhotographerUseCasesFactory } from "../../infra/factories/photographer-use-cases.factory";
 import { PhotographerMapperDTO } from "../mappers/photographer-mapper";
-import { CreatePhotographerRequestDTO } from "../dto/request/photographer/create";
+import { createPhotographerRequestSchema } from "../dto/request/photographer/create";
 
 export class PhotographerController {
     constructor(
@@ -22,8 +22,8 @@ export class PhotographerController {
     }
 
     create = async (req: Request, res: Response) => {
-        const { name, email, password, phoneNumber, studioName } = req.body;
-        const newPhotographerEntity = await this.useCases.createPhotographerUseCase.execute(new CreatePhotographerRequestDTO(name, email, password, phoneNumber, studioName));
+        const request = createPhotographerRequestSchema.parse(req.body);
+        const newPhotographerEntity = await this.useCases.createPhotographerUseCase.execute(request);
         const newPhotographerDTO = PhotographerMapperDTO.toCreateResponseDTO(newPhotographerEntity);
         res.status(201).json(newPhotographerDTO);
     }
