@@ -1,4 +1,4 @@
-export class GetByIdPhotographerResponse {
+export class GetByIdPhotographerResponseDTO {
     constructor(
         public readonly id: string,
         public readonly name: string,
