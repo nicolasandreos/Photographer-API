@@ -27,11 +27,11 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
   async create(photographer: PhotographerEntity): Promise<PhotographerEntity> {
     const databasePhotographer = await db.photographer.create({
       data: {
-        name: photographer.getName(),
-        email: photographer.getEmail(),
-        passwordHash: photographer.getPasswordHash(),
-        phoneNumber: photographer.getPhoneNumber(),
-        studioName: photographer.getStudioName(),
+        name: photographer.getName()!,
+        email: photographer.getEmail()!,
+        passwordHash: photographer.getPasswordHash()!,
+        phoneNumber: photographer.getPhoneNumber()!,
+        studioName: photographer.getStudioName()!,
       },
     });
     return PhotographerMapperRepository.toEntity(databasePhotographer);

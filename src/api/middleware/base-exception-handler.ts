@@ -24,6 +24,7 @@ export const BaseApiExceptionHandler = (err: BaseApiException | ZodError, req: R
                 ]),
             ),
         })
+        return;
     }
 
     console.error(err);

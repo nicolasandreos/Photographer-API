@@ -116,6 +116,31 @@ export const swaggerSpec = swaggerJsdoc({
                     },
                 },
             },
+            "/photographer/login": {
+                post: {
+                    summary: "Login a photographer",
+                    requestBody: {
+                    required: true,
+                    content: {
+                        "application/json": {
+                        schema: {
+                            type: "object",
+                            properties: {
+                            email: { type: "string" },
+                            password: { type: "string" },
+                            },
+                        },
+                        },
+                    },
+                    },
+                    responses: {
+                    "200": { description: "Photographer logged in" },
+                    "401": { description: "Invalid credentials" },
+                    "400": { description: "Validation error" },
+                    "500": { description: "Internal server error" },
+                    },
+                },
+            },
         },
     },
     apis: [],

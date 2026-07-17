@@ -3,6 +3,7 @@ import { PhotographerUseCasesFactory } from "../../infra/factories/photographer-
 import { PhotographerMapperDTO } from "../mappers/photographer-mapper";
 import { createPhotographerRequestSchema } from "../dto/request/photographer/create";
 import { updatePhotographerRequestSchema } from "../dto/request/photographer/update";
+import { loginPhotographerRequestSchema } from "../dto/request/photographer/login";
 
 export class PhotographerController {
     constructor(
@@ -41,5 +42,11 @@ export class PhotographerController {
         const { id } = req.params;
         await this.useCases.deletePhotographerUseCase.execute(String(id));
         res.status(204).send();
+    }
+
+    login = async (req: Request, res: Response) => {
+        const request = loginPhotographerRequestSchema.parse(req.body);
+        const loginResponse = await this.useCases.loginPhotographerUseCase.execute(request);
+        res.status(200).json(loginResponse);
     }
 }

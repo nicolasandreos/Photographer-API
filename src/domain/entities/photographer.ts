@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt";
+
 interface PhotographerEntityProps {
     id?: string;
     name?: string;
@@ -44,6 +46,13 @@ export class PhotographerEntity {
 
     public getEmailVerified(): boolean | undefined {
         return this.props.emailVerified;
+    }
+
+    public comparePassword(password: string): boolean {
+        if (!this.props.passwordHash) {
+            return false;
+        }
+        return bcrypt.compareSync(password, this.props.passwordHash);
     }
 }
 
