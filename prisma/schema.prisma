@@ -23,3 +23,12 @@ model Photographer {
 
   @@map("photographers")
 }
+
+model AdministratorUser {
+  id String @id @default(uuid())
+  email String @unique
+  passwordHash String @map("password_hash")
+  lastLoginAt DateTime? @map("last_login_at")
+
+  @@map("administrator_users")
+}
