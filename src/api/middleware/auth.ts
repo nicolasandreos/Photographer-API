@@ -5,11 +5,11 @@ import {
 } from "../../application/ports/token-service";
 import { UnauthorizedException } from "../../exceptions/jwt-token-exception";
 
-interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Request {
   user?: UserTokenPayload;
 }
 
-export const auth = (tokenService: ITokenService) => {
+export const createAuthMiddleware = (tokenService: ITokenService) => {
   return async (
     req: AuthenticatedRequest,
     res: Response,
