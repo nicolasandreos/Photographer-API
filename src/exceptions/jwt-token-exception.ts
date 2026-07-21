@@ -17,3 +17,9 @@ export class UnauthorizedException extends BaseApiException {
         super("Unauthorized", 401);
     }
 }
+
+export class OnlyAdministratorUserException extends BaseApiException {
+    constructor() {
+        super("Only administrator users can access this resource", 403);
+    }
+}
