@@ -11,3 +11,9 @@ export class InvalidTokenException extends BaseApiException {
         super("Invalid token or expired", 401);
     }
 }
+
+export class UnauthorizedException extends BaseApiException {
+    constructor() {
+        super("Unauthorized", 401);
+    }
+}

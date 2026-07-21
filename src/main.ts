@@ -1,11 +1,14 @@
 import { createApp } from "./api/app";
 import { PhotographerController } from "./api/controllers/photographer.controller";
 import { createPhotographerRouter } from "./api/routes/photographer.routes";
+import { JwtTokenService } from "./infra/adapters/jwt-token-service";
 import { PhotographerUseCasesFactory } from "./infra/factories/photographer-use-cases.factory";
+
+const tokenService = new JwtTokenService();
 
 const photographerUseCasesFactory = new PhotographerUseCasesFactory();
 const photographerController = new PhotographerController(photographerUseCasesFactory);
-const photographerRouter = createPhotographerRouter(photographerController)
+const photographerRouter = createPhotographerRouter(photographerController, tokenService);
 
 const app = createApp(photographerRouter);
 
