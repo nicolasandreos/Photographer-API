@@ -1,5 +1,8 @@
 import { CreatePhotographerRequestDTO } from "../../api/dto/request/photographer/create";
-import { PhotographerEntity } from "../../domain/entities/photographer";
+import {
+  CreatePhotographerEntity,
+  PhotographerEntity,
+} from "../../domain/entities/photographer";
 import { IPhotographerRepository } from "../../domain/repositories/photographer";
 import {
   PhotographerAlreadyExistsException,
@@ -25,12 +28,12 @@ export class CreatePhotographerUseCase {
 
     const hashedPassword = await this.passwordService.hash(photographer.password);
 
-    const photographerEntity = new PhotographerEntity({
+    const photographerEntity = new CreatePhotographerEntity({
       name: photographer.name,
       email: photographer.email,
       passwordHash: hashedPassword,
       phoneNumber: photographer.phoneNumber,
-      studioName: photographer.studioName,
+      studioName: photographer.studioName ?? null,
     });
 
     const createdPhotographerEntity =

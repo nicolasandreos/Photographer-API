@@ -1,5 +1,8 @@
 import { UpdatePhotographerRequestDTO } from "../../api/dto/request/photographer/update";
-import { PhotographerEntity } from "../../domain/entities/photographer";
+import {
+  PhotographerEntity,
+  UpdatePhotographerEntity,
+} from "../../domain/entities/photographer";
 import { IPhotographerRepository } from "../../domain/repositories/photographer";
 import {
   PhotographerEmailAlreadyExistsException,
@@ -32,12 +35,11 @@ export class UpdatePhotographerUseCase {
       }
     }
 
-    const photographerEntity = new PhotographerEntity({
-      id: existingPhotographer.getId(),
-      name: photographer.name ?? undefined,
-      email: photographer.email ?? undefined,
-      phoneNumber: photographer.phoneNumber ?? undefined,
-      studioName: photographer.studioName ?? undefined,
+    const photographerEntity = new UpdatePhotographerEntity({
+      name: photographer.name,
+      email: photographer.email,
+      phoneNumber: photographer.phoneNumber,
+      studioName: photographer.studioName,
     });
 
     const updatedPhotographer = await this.photographerRepository.update(

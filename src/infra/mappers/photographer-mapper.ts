@@ -9,7 +9,9 @@ export class PhotographerMapperRepository {
       email: photographer.email,
       passwordHash: photographer.passwordHash,
       phoneNumber: photographer.phoneNumber,
-      studioName: photographer.studioName ?? undefined,
+      studioName: photographer.studioName,
+      isActive: photographer.isActive,
+      emailVerified: photographer.emailVerified,
     });
   }
 }

@@ -22,8 +22,8 @@ export class LoginPhotographerUseCase {
         }
 
         const userPayload: UserTokenPayload = {
-            sub: photographer.getId() as string,
-            email: photographer.getEmail()!,
+            sub: photographer.getId(),
+            email: photographer.getEmail(),
         }
 
         const accessToken = await this.tokenService.generateAccessToken(userPayload);

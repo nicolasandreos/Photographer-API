@@ -1,4 +1,8 @@
-import { PhotographerEntity } from "../../domain/entities/photographer";
+import {
+  CreatePhotographerEntity,
+  PhotographerEntity,
+  UpdatePhotographerEntity,
+} from "../../domain/entities/photographer";
 import { IPhotographerRepository } from "../../domain/repositories/photographer";
 import { db } from "../database/client";
 import { PhotographerMapperRepository } from "../mappers/photographer-mapper";
@@ -24,14 +28,14 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
       : null;
   }
 
-  async create(photographer: PhotographerEntity): Promise<PhotographerEntity> {
+  async create(photographer: CreatePhotographerEntity): Promise<PhotographerEntity> {
     const databasePhotographer = await db.photographer.create({
       data: {
-        name: photographer.getName()!,
-        email: photographer.getEmail()!,
-        passwordHash: photographer.getPasswordHash()!,
-        phoneNumber: photographer.getPhoneNumber()!,
-        studioName: photographer.getStudioName()!,
+        name: photographer.getName(),
+        email: photographer.getEmail(),
+        passwordHash: photographer.getPasswordHash(),
+        phoneNumber: photographer.getPhoneNumber(),
+        studioName: photographer.getStudioName(),
       },
     });
     return PhotographerMapperRepository.toEntity(databasePhotographer);
@@ -53,7 +57,7 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
 
   async update(
     id: string,
-    photographer: PhotographerEntity,
+    photographer: UpdatePhotographerEntity,
   ): Promise<PhotographerEntity> {
     const updatedPhotographer = await db.photographer.update({
       where: {
