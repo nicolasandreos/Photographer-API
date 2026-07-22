@@ -6,7 +6,7 @@ import { PhotographerUseCasesFactory } from "./infra/factories/photographer-use-
 import { PrismaAdministratorUserRepository } from "./infra/adapters/prisma-administrator-user";
 import { AdministratorUserUseCasesFactory } from "./infra/factories/administrator-user-use-cases-factory";
 import { AdministratorUserController } from "./api/controllers/administrator-user.controller";
-import { createAdministratorUserRoutes } from "./api/routes/administrato-user.routes";
+import { createAdministratorUserRoutes } from "./api/routes/administrator-user.routes";
 
 const tokenService = new JwtTokenService();
 

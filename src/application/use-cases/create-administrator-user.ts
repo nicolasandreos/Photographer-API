@@ -1,6 +1,7 @@
 import { CreateAdministratorUserRequest } from "../../api/dto/request/administrator-user/create";
 import { AdministratorUserEntity } from "../../domain/entities/administrator-user";
 import { IAdministratorUserRepository } from "../../domain/repositories/administrator-user";
+import { AdministratorUserAlreadyExistsException } from "../../exceptions/administrator-user";
 import { IPasswordService } from "../ports/password-service";
 
 export class CreateAdministratorUserUseCase {
@@ -10,6 +11,12 @@ export class CreateAdministratorUserUseCase {
     ) {}
 
     async execute(createAdministratorUserRequest: CreateAdministratorUserRequest): Promise<AdministratorUserEntity> {
+
+        const administratorUser = await this.repository.getByEmail(createAdministratorUserRequest.email);
+        if (administratorUser) {
+            throw new AdministratorUserAlreadyExistsException();
+        }
+
         const passwordHash = await this.passwordService.hash(createAdministratorUserRequest.password);
 
         const administratorUserEntity = new AdministratorUserEntity({

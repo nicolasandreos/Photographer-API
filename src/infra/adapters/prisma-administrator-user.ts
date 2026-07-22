@@ -26,4 +26,18 @@ export class PrismaAdministratorUserRepository implements IAdministratorUserRepo
 
         return AdministratorUserMapperRepository.toEntity(databaseAdministratorUser);
     }
+
+    async getByEmail(email: string): Promise<AdministratorUserEntity | null> {
+        const databaseAdministratorUser = await db.administratorUser.findUnique({
+            where: {
+                email
+            }
+        });
+        
+        if (!databaseAdministratorUser) {
+            return null;
+        }
+
+        return AdministratorUserMapperRepository.toEntity(databaseAdministratorUser);
+    }
 }
