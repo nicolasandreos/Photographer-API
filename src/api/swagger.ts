@@ -141,6 +141,31 @@ export const swaggerSpec = swaggerJsdoc({
                     },
                 },
             },
+            "/administrator-user/create": {
+                post: {
+                    summary: "Create a new administrator user",
+                    requestBody: {
+                        required: true,
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        email: { type: "string" },
+                                        password: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        "201": { description: "Administrator user created" },
+                        "400": { description: "Bad request" },
+                        "409": { description: "Administrator user already exists" },
+                        "500": { description: "Internal server error" },
+                    },
+                },
+            },
         },
     },
     apis: [],

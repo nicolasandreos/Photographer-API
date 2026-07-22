@@ -15,4 +15,15 @@ export class PrismaAdministratorUserRepository implements IAdministratorUserRepo
         }
         return AdministratorUserMapperRepository.toEntity(databaseAdministratorUser);
     }
+
+    async create(administratorUserEntity: AdministratorUserEntity): Promise<AdministratorUserEntity> {
+        const databaseAdministratorUser = await db.administratorUser.create({
+            data: {
+                email: administratorUserEntity.getEmail(),
+                passwordHash: administratorUserEntity.getPasswordHash(),
+            }
+        });
+
+        return AdministratorUserMapperRepository.toEntity(databaseAdministratorUser);
+    }
 }

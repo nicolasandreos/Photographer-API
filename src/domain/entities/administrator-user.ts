@@ -1,5 +1,5 @@
 interface AdministratorUserEntityProps {
-    id: string;
+    id?: string;
     email: string;
     passwordHash: string;
     lastLoginAt: Date | null;
@@ -10,7 +10,7 @@ export class AdministratorUserEntity {
         private readonly props: AdministratorUserEntityProps
     ) {}
 
-    public getId(): string {
+    public getId(): string | undefined {
         return this.props.id;
     }
 
