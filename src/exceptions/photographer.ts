@@ -29,3 +29,9 @@ export class InvalidPasswordException extends BaseApiException {
         super("Invalid password", 401);
     }
 }
+
+export class NewPasswordCannotBeTheSameAsTheOldPasswordException extends BaseApiException {
+    constructor() {
+        super("New password cannot be the same as the old password", 400);
+    }
+}

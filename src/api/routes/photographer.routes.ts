@@ -18,6 +18,7 @@ export const createPhotographerRouter = (
   router.put("/:id", controller.update);
   router.delete("/:id", controller.delete);
   router.post("/login", controller.login);
+  router.put("/:id/change-password", controller.changePassword)
 
   return router;
 };

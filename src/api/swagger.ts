@@ -116,6 +116,40 @@ export const swaggerSpec = swaggerJsdoc({
                     },
                 },
             },
+            "/photographer/{id}/change-password": {
+                put: {
+                    summary: "Change a photographer password",
+                    parameters: [
+                        {
+                            name: "id",
+                            in: "path",
+                            required: true,
+                            schema: { type: "string" },
+                        },
+                    ],
+                    requestBody: {
+                        required: true,
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        password: { type: "string" },
+                                        newPassword: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        "204": { description: "Photographer password changed" },
+                        "400": { description: "Bad request" },
+                        "401": { description: "Invalid password" },
+                        "409": { description: "New password cannot be the same as the old password" },
+                        "500": { description: "Internal server error" },
+                    },
+                },
+            },
             "/photographer/login": {
                 post: {
                     summary: "Login a photographer",

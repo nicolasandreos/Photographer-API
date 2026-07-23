@@ -11,4 +11,5 @@ export interface IPhotographerRepository {
     getByEmail: (email: string) => Promise<PhotographerEntity | null>;
     update: (id: string, photographer: UpdatePhotographerEntity) => Promise<PhotographerEntity>;
     delete: (id: string) => Promise<void>;
+    updatePassword: (photographer: PhotographerEntity) => Promise<void>;
 }

@@ -51,6 +51,10 @@ export class PhotographerEntity {
     public comparePassword(password: string): boolean {
         return bcrypt.compareSync(password, this.props.passwordHash);
     }
+
+    public updatePassword(passwordHash: string): void {
+        this.props.passwordHash = passwordHash;
+    }
 }
 
 interface CreatePhotographerEntityProps {

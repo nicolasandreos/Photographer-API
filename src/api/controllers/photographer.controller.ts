@@ -4,6 +4,7 @@ import { PhotographerMapperDTO } from "../mappers/photographer-mapper";
 import { createPhotographerRequestSchema } from "../dto/request/photographer/create";
 import { updatePhotographerRequestSchema } from "../dto/request/photographer/update";
 import { loginPhotographerRequestSchema } from "../dto/request/photographer/login";
+import { changePhotographerPasswordRequestSchema } from "../dto/request/photographer/change-password";
 
 export class PhotographerController {
     constructor(
@@ -48,5 +49,12 @@ export class PhotographerController {
         const request = loginPhotographerRequestSchema.parse(req.body);
         const loginResponse = await this.useCases.loginPhotographerUseCase.execute(request);
         res.status(200).json(loginResponse);
+    }
+
+    changePassword = async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const request = changePhotographerPasswordRequestSchema.parse(req.body);
+        await this.useCases.changePhotographerPasswordUseCase.execute(String(id), request);
+        res.status(204).send();
     }
 }
