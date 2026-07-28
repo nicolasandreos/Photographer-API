@@ -7,15 +7,15 @@ import { IAdministratorUserRepository } from "../../domain/repositories/administ
 
 export const createPhotographerRouter = (
   controller: PhotographerController,
-  tonkenService: ITokenService,
+  tokenService: ITokenService,
   repository: IAdministratorUserRepository,
 ): Router => {
   const router = Router();
 
-  router.get("/all", createAuthMiddleware(tonkenService), administratorUser(repository), controller.getAll);
+  router.get("/all", createAuthMiddleware(tokenService), administratorUser(repository), controller.getAll);
   router.get("/:id", controller.getById);
   router.post("/create", controller.create);
-  router.put("/:id", controller.update);
+  router.put("/me", createAuthMiddleware(tokenService), controller.update);
   router.delete("/:id", controller.delete);
   router.post("/login", controller.login);
   router.put("/:id/change-password", controller.changePassword)

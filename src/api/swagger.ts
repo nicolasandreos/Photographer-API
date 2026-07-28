@@ -37,9 +37,8 @@ export const swaggerSpec = swaggerJsdoc({
                         "500": { description: "Internal server error" },
                     },
                 },
-
-                put: {
-                    summary: "Update a photographer",
+                delete: {
+                    summary: "Delete a photographer",
                     parameters: [
                         {
                             name: "id",
@@ -48,6 +47,16 @@ export const swaggerSpec = swaggerJsdoc({
                             schema: { type: "string" },
                         },
                     ],
+                    responses: {
+                        "204": { description: "Photographer deleted" },
+                        "404": { description: "Photographer not found" },
+                        "500": { description: "Internal server error" },
+                    },
+                },
+            },
+            "/photographer/me": {
+                put: {
+                    summary: "Update a photographer",
                     requestBody: {
                         required: true,
                         content: {
@@ -67,22 +76,6 @@ export const swaggerSpec = swaggerJsdoc({
                     responses: {
                         "200": { description: "Photographer updated" },
                         "400": { description: "Bad request" },
-                        "404": { description: "Photographer not found" },
-                        "500": { description: "Internal server error" },
-                    },
-                },
-                delete: {
-                    summary: "Delete a photographer",
-                    parameters: [
-                        {
-                            name: "id",
-                            in: "path",
-                            required: true,
-                            schema: { type: "string" },
-                        },
-                    ],
-                    responses: {
-                        "204": { description: "Photographer deleted" },
                         "404": { description: "Photographer not found" },
                         "500": { description: "Internal server error" },
                     },

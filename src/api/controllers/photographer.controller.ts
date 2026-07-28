@@ -5,6 +5,7 @@ import { createPhotographerRequestSchema } from "../dto/request/photographer/cre
 import { updatePhotographerRequestSchema } from "../dto/request/photographer/update";
 import { loginPhotographerRequestSchema } from "../dto/request/photographer/login";
 import { changePhotographerPasswordRequestSchema } from "../dto/request/photographer/change-password";
+import { AuthenticatedRequest } from "../middleware/auth";
 
 export class PhotographerController {
     constructor(
@@ -31,10 +32,10 @@ export class PhotographerController {
         res.status(201).json(newPhotographerDTO);
     }
 
-    update = async (req: Request, res: Response) => {
-        const { id } = req.params;
+    update = async (req: AuthenticatedRequest, res: Response) => {
+        const id = req.user?.sub as string;
         const request = updatePhotographerRequestSchema.parse(req.body);
-        const updatedPhotographerEntity = await this.useCases.updatePhotographerUseCase.execute(String(id), request);
+        const updatedPhotographerEntity = await this.useCases.updatePhotographerUseCase.execute(id, request);
         const updatedPhotographerDTO = PhotographerMapperDTO.toUpdateResponseDTO(updatedPhotographerEntity);
         res.status(200).json(updatedPhotographerDTO);
     }
