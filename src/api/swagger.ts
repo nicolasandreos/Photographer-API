@@ -168,6 +168,31 @@ export const swaggerSpec = swaggerJsdoc({
                     },
                 },
             },
+            "/administrator-user/login": {
+                post: {
+                    summary: "Login a administrator user",
+                    requestBody: {
+                        required: true,
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        email: { type: "string" },
+                                        password: { type: "string" },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        "200": { description: "Administrator user logged in" },
+                        "401": { description: "Invalid credentials" },
+                        "400": { description: "Validation error" },
+                        "500": { description: "Internal server error" },
+                    },
+                },
+            },
             "/administrator-user/create": {
                 post: {
                     summary: "Create a new administrator user",

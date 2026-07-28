@@ -7,6 +7,7 @@ export const createAdministratorUserRoutes = (
     const router = Router();
 
     router.post("/create", controller.create);
+    router.post("/login", controller.login);
 
     return router;
 }
