@@ -1,5 +1,6 @@
-import { beforeEach } from "vitest";
+import { beforeEach, afterEach, afterAll, beforeAll } from "vitest";
 import { config } from "dotenv";
+import { cleanDatabase, seedDatabase } from "../../infra/database/seed";
 
 config({ path: ".env.test", override: true });
 
@@ -16,8 +17,19 @@ if (!databaseUrl.includes("photostudio_test")) {
 }
 
 const { db } = await import("../../infra/database/client");
-const { resetDatabase } = await import("../../infra/database/seed");
+
+beforeAll(async () => {
+  await db.$connect();
+});
 
 beforeEach(async () => {
-  await resetDatabase(db);
+  await seedDatabase(db);
+});
+
+afterEach(async () => {
+  await cleanDatabase(db);
+});
+
+afterAll(async () => {
+  await db.$disconnect();
 });

@@ -96,8 +96,3 @@ export async function seedDatabase(db: PrismaClient): Promise<void> {
     })),
   });
 }
-
-export async function resetDatabase(db: PrismaClient): Promise<void> {
-  await cleanDatabase(db);
-  await seedDatabase(db);
-}
