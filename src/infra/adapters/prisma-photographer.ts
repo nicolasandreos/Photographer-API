@@ -82,8 +82,8 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
     });
   }
 
-  async updatePassword(photographer: PhotographerEntity): Promise<void> {
-    await db.photographer.update({
+  async updatePassword(photographer: PhotographerEntity): Promise<PhotographerEntity> {
+    const updatedPhotographer = await db.photographer.update({
       where: {
         id: photographer.getId(),
       },
@@ -91,5 +91,6 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
         passwordHash: photographer.getPasswordHash(),
       },
     });
+    return PhotographerMapperRepository.toEntity(updatedPhotographer);
   }
 }

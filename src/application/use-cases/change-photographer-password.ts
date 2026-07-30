@@ -2,6 +2,7 @@ import { ChangePhotographerPasswordRequestDTO } from "../../api/dto/request/phot
 import { IPasswordService } from "../ports/password-service";
 import { IPhotographerRepository } from "../../domain/repositories/photographer";
 import { InvalidPasswordException, NewPasswordCannotBeTheSameAsTheOldPasswordException, PhotographerNotFoundException } from "../../exceptions/photographer";
+import { PhotographerEntity } from "../../domain/entities/photographer";
 
 export class ChangePhotographerPasswordUseCase {
 
@@ -10,7 +11,7 @@ export class ChangePhotographerPasswordUseCase {
         private readonly repository: IPhotographerRepository
     ) {}
 
-    async execute(photographerId: string, changePhotographerPasswordRequest: ChangePhotographerPasswordRequestDTO): Promise<void> {
+    async execute(photographerId: string, changePhotographerPasswordRequest: ChangePhotographerPasswordRequestDTO): Promise<PhotographerEntity> {
         const password = changePhotographerPasswordRequest.password;
         const newPassword = changePhotographerPasswordRequest.newPassword;
 
@@ -32,7 +33,7 @@ export class ChangePhotographerPasswordUseCase {
         
         const hashedNewPassword = await this.passwordService.hash(newPassword);
         databasePhotographer.updatePassword(hashedNewPassword);
-        await this.repository.updatePassword(databasePhotographer);
-        return;
+        const updatedPhotographer = await this.repository.updatePassword(databasePhotographer);
+        return updatedPhotographer;
     }
 }

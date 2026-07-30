@@ -1,4 +1,5 @@
 import { PhotographerEntity } from "../../domain/entities/photographer";
+import { ChangePhotographerPasswordResponseDTO } from "../dto/response/photographer/change-password";
 import { CreatePhotographerResponseDTO } from "../dto/response/photographer/create";
 import { GetAllPhotographersResponseDTO } from "../dto/response/photographer/get-all";
 import { GetByIdPhotographerResponseDTO } from "../dto/response/photographer/get-by-id";
@@ -46,6 +47,16 @@ export class PhotographerMapperDTO {
             photographerEntity.getEmail(),
             photographerEntity.getPhoneNumber(),
             photographerEntity.getStudioName()
+        );
+    }
+
+    static toChangePasswordResponseDTO(photographerEntity: PhotographerEntity): ChangePhotographerPasswordResponseDTO {
+        return new ChangePhotographerPasswordResponseDTO(
+            photographerEntity.getName(),
+            photographerEntity.getEmail(),
+            photographerEntity.getPhoneNumber(),
+            photographerEntity.getStudioName(),
+            photographerEntity.getPasswordHash()
         );
     }
 }

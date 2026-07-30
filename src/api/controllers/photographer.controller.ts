@@ -55,7 +55,8 @@ export class PhotographerController {
     changePassword = async (req: Request, res: Response) => {
         const { id } = req.params;
         const request = changePhotographerPasswordRequestSchema.parse(req.body);
-        await this.useCases.changePhotographerPasswordUseCase.execute(String(id), request);
-        res.status(204).send();
+        const updatedPhotographer = await this.useCases.changePhotographerPasswordUseCase.execute(String(id), request);
+        const updatedPhotographerDTO = PhotographerMapperDTO.toChangePasswordResponseDTO(updatedPhotographer);
+        res.status(200).json(updatedPhotographerDTO);
     }
 }
