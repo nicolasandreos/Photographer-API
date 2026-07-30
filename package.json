@@ -8,7 +8,8 @@
     "postinstall": "prisma generate",
     "db:seed": "prisma db seed",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:migrate": "dotenv -e .env.test -- prisma migrate deploy"
   },
   "author": "Nicolas Andreos",
   "license": "ISC",

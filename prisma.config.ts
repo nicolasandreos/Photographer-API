@@ -3,6 +3,7 @@ import { defineConfig } from "prisma/config";
 
 config({ path: ".env" });
 config({ path: ".env.development" });
+config({ path: ".env.test" });
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
