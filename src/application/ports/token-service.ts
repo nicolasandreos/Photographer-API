@@ -4,7 +4,7 @@ export interface UserTokenPayload {
 }
 
 export interface ITokenService {
-    generateAccessToken(userPayload: UserTokenPayload): Promise<string>;
-    generateRefreshToken(userPayload: UserTokenPayload): Promise<string>;
-    verifyToken(token: string): Promise<UserTokenPayload>;
+    generateAccessToken(userPayload: UserTokenPayload): string;
+    generateRefreshToken(userPayload: UserTokenPayload): string;
+    verifyToken(token: string): UserTokenPayload;
 }

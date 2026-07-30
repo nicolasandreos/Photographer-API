@@ -11,21 +11,21 @@ export class JwtTokenService implements ITokenService {
         return process.env.JWT_SECRET_KEY as string;
     }
 
-    async generateAccessToken(userPayload: UserTokenPayload): Promise<string> {
+    generateAccessToken(userPayload: UserTokenPayload): string {
         const secret = JwtTokenService.verifySecretKey();
 
         const token = jwt.sign(userPayload, secret, { expiresIn: "1h" });
         return token;
     }
 
-    async generateRefreshToken(userPayload: UserTokenPayload): Promise<string> {
+    generateRefreshToken(userPayload: UserTokenPayload): string {
         const secret = JwtTokenService.verifySecretKey();
 
         const token = jwt.sign(userPayload, secret, { expiresIn: "7d" });
         return token;
     }
 
-    async verifyToken(token: string): Promise<UserTokenPayload> {
+    verifyToken(token: string): UserTokenPayload {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as string) as UserTokenPayload;
             return decoded;
@@ -33,5 +33,4 @@ export class JwtTokenService implements ITokenService {
             throw new InvalidTokenException();
         }
     }
-
 }
