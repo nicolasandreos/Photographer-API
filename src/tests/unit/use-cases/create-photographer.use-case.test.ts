@@ -5,7 +5,6 @@ import { CreatePhotographerUseCase } from "../../../application/use-cases/create
 import { PhotographerEntity } from "../../../domain/entities/photographer";
 import { PhotographerAlreadyExistsException, PhotographerCreationFailedException } from "../../../exceptions/photographer";
 import { CreatePhotographerRequestDTO } from "../../../api/dto/request/photographer/create";
-import { create } from "node:domain";
 
 describe("CreatePhotographerUseCase", () => {
 
