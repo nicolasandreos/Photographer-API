@@ -35,13 +35,13 @@ export class CreatePhotographerUseCase {
       phoneNumber: photographer.phoneNumber,
       studioName: photographer.studioName ?? null,
     });
-
-    const createdPhotographerEntity =
-      await this.repository.create(photographerEntity);
-    if (!createdPhotographerEntity) {
+    try {
+      const createdPhotographerEntity =
+        await this.repository.create(photographerEntity);
+      return createdPhotographerEntity;
+    } catch (error) {
       throw new PhotographerCreationFailedException();
     }
-
-    return createdPhotographerEntity;
+    
   }
 }

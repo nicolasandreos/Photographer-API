@@ -2,9 +2,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { IPhotographerRepository } from "../../../domain/repositories/photographer";
 import { IPasswordService } from "../../../application/ports/password-service";
 import { CreatePhotographerUseCase } from "../../../application/use-cases/create-photographer";
-import { CreatePhotographerEntity, PhotographerEntity } from "../../../domain/entities/photographer";
-import { PhotographerAlreadyExistsException } from "../../../exceptions/photographer";
+import { PhotographerEntity } from "../../../domain/entities/photographer";
+import { PhotographerAlreadyExistsException, PhotographerCreationFailedException } from "../../../exceptions/photographer";
 import { CreatePhotographerRequestDTO } from "../../../api/dto/request/photographer/create";
+import { create } from "node:domain";
 
 describe("CreatePhotographerUseCase", () => {
 
@@ -78,5 +79,29 @@ describe("CreatePhotographerUseCase", () => {
         expect(entitySent.getPasswordHash()).toBe(hashedPassword);
         expect(entitySent.getPasswordHash()).not.toBe(dto.password);
         
+    })
+
+    it("should throw PhotographerCreationFailedException if repository creation fails", async () => {
+        vi.mocked(repository.getByEmail).mockResolvedValue(null);
+        vi.mocked(repository.create).mockRejectedValue(new Error("Creation failed"));
+        await expect(useCase.execute(dto)).rejects.toThrow(PhotographerCreationFailedException);
+    })
+
+    it("should return the created photographer entity", async () => {
+        vi.mocked(repository.getByEmail).mockResolvedValue(null);
+        vi.mocked(passwordService.hash).mockResolvedValue("hashed-password");
+        const createdPhotographerEntity = new PhotographerEntity({
+            id: "1",
+            name: dto.name,
+            email: dto.email,
+            passwordHash: "hashed-password",
+            phoneNumber: dto.phoneNumber,
+            studioName: dto.studioName ?? null,
+            isActive: true,
+            emailVerified: true,
+        })
+        vi.mocked(repository.create).mockResolvedValue(createdPhotographerEntity);
+        const result = await useCase.execute(dto);
+        expect(result).toEqual(createdPhotographerEntity);
     })
 })
