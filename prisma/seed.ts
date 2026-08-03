@@ -3,10 +3,10 @@ import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import { PrismaClient } from "../generated/prisma/client";
 import { createMysqlDbConfig } from "../src/infra/database/mysql-config";
 import {
-  resetDatabase,
-  SEED_ADMINISTRATORS,
-  SEED_PHOTOGRAPHERS,
+  cleanDatabase,
+  seedDatabase,
 } from "../src/infra/database/seed";
+import { SEED_ADMINISTRATORS, SEED_PHOTOGRAPHERS } from "../src/infra/database/seed";
 
 config({ path: ".env" });
 config({ path: ".env.development" });
@@ -15,7 +15,8 @@ const adapter = new PrismaMariaDb(createMysqlDbConfig());
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  await resetDatabase(prisma);
+  await cleanDatabase(prisma);
+  await seedDatabase(prisma);
 
   console.log(
     `Seed: ${SEED_PHOTOGRAPHERS.length} photographers and ${SEED_ADMINISTRATORS.length} administrators inserted.`

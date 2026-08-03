@@ -5,6 +5,7 @@ export const SEED_PASSWORD = "Test@123";
 
 export const SEED_PHOTOGRAPHERS = [
   {
+    id: "1",
     name: "Ana Costa",
     email: "ana.costa@luzestudio.fake",
     phoneNumber: "+55 11 91234-0001",
@@ -14,6 +15,7 @@ export const SEED_PHOTOGRAPHERS = [
     lastLoginAt: new Date("2026-03-15T14:30:00.000Z"),
   },
   {
+    id: "2",
     name: "Bruno Mendes",
     email: "bruno.mendes@clickurban.fake",
     phoneNumber: "+55 21 99876-0002",
@@ -23,6 +25,7 @@ export const SEED_PHOTOGRAPHERS = [
     lastLoginAt: null,
   },
   {
+    id: "3",
     name: "Carla Ribeiro",
     email: "carla.ribeiro@momentos.fake",
     phoneNumber: "+55 31 98765-0003",
@@ -32,6 +35,7 @@ export const SEED_PHOTOGRAPHERS = [
     lastLoginAt: new Date("2026-06-01T09:00:00.000Z"),
   },
   {
+    id: "4",
     name: "Diego Alves",
     email: "diego.alves@frameone.fake",
     phoneNumber: "+55 41 97654-0004",
@@ -41,6 +45,7 @@ export const SEED_PHOTOGRAPHERS = [
     lastLoginAt: null,
   },
   {
+    id: "5",
     name: "Elena Fischer",
     email: "elena.fischer@goldenhour.fake",
     phoneNumber: "+55 51 96543-0005",
@@ -53,22 +58,27 @@ export const SEED_PHOTOGRAPHERS = [
 
 export const SEED_ADMINISTRATORS = [
   {
+    id: "1",
     email: "admin.one@photostudio.fake",
     lastLoginAt: new Date("2026-03-10T10:00:00.000Z"),
   },
   {
+    id: "2",
     email: "admin.two@photostudio.fake",
     lastLoginAt: null,
   },
   {
+    id: "3",
     email: "admin.three@photostudio.fake",
     lastLoginAt: new Date("2026-05-20T16:30:00.000Z"),
   },
   {
+    id: "4",
     email: "admin.four@photostudio.fake",
     lastLoginAt: null,
   },
   {
+    id: "5",
     email: "admin.five@photostudio.fake",
     lastLoginAt: new Date("2026-07-15T08:15:00.000Z"),
   },
