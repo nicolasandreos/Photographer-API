@@ -6,21 +6,24 @@ import { UpdatePhotographerUseCase } from "../../application/use-cases/update-ph
 import { IPhotographerRepository } from "../../domain/repositories/photographer";
 import { PasswordService } from "../adapters/password-service";
 import { PrismaPhotographerRepository } from "../adapters/prisma-photographer";
+import { EmailNotificationAdapter } from "../adapters/email-notifier";
 import { IPasswordService } from "../../application/ports/password-service";
 import { LoginPhotographerUseCase } from "../../application/use-cases/login-photographer";
 import { JwtTokenService } from "../adapters/jwt-token-service";
 import { ITokenService } from "../../application/ports/token-service";
 import { ChangePhotographerPasswordUseCase } from "../../application/use-cases/change-photographer-password";
+import { ISendNotificationService } from "../../application/ports/email-verification";
 
 export class PhotographerUseCasesFactory {
   repository: IPhotographerRepository = new PrismaPhotographerRepository();
   
   passwordService: IPasswordService = new PasswordService();
   tokenService: ITokenService = new JwtTokenService();
+  emailNofifier: ISendNotificationService = new EmailNotificationAdapter();
 
   getAllPhotographersUseCase = new GetAllPhotographersUseCase(this.repository);
   getByIdPhotographerUseCase = new GetByIdPhotographerUseCase(this.repository);
-  createPhotographerUseCase = new CreatePhotographerUseCase(this.repository, this.passwordService);
+  createPhotographerUseCase = new CreatePhotographerUseCase(this.repository, this.passwordService, this.emailNofifier);
   updatePhotographerUseCase = new UpdatePhotographerUseCase(this.repository);
   deletePhotographerUseCase = new DeletePhotographerUseCase(this.repository);
   loginPhotographerUseCase = new LoginPhotographerUseCase(this.repository, this.tokenService);

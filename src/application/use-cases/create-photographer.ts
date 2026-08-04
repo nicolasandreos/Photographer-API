@@ -8,12 +8,14 @@ import {
   PhotographerAlreadyExistsException,
   PhotographerCreationFailedException,
 } from "../../exceptions/photographer";
+import { ISendNotificationService, sendNotificationProps } from "../ports/email-verification";
 import { IPasswordService } from "../ports/password-service";
 
 export class CreatePhotographerUseCase {
   constructor(
     private readonly repository: IPhotographerRepository,
-    private readonly passwordService: IPasswordService
+    private readonly passwordService: IPasswordService,
+    private readonly emailNotifier: ISendNotificationService,
   ) {}
 
   async execute(
@@ -26,7 +28,9 @@ export class CreatePhotographerUseCase {
       throw new PhotographerAlreadyExistsException();
     }
 
-    const hashedPassword = await this.passwordService.hash(photographer.password);
+    const hashedPassword = await this.passwordService.hash(
+      photographer.password,
+    );
 
     const photographerEntity = new CreatePhotographerEntity({
       name: photographer.name,
@@ -38,10 +42,16 @@ export class CreatePhotographerUseCase {
     try {
       const createdPhotographerEntity =
         await this.repository.create(photographerEntity);
+      const props: sendNotificationProps = {
+        to: photographer.email,
+        subject: "Hello from Resend Using Login",
+        text: "Hello from Resend",
+      };
+
+      this.emailNotifier.sendNotification(props);
       return createdPhotographerEntity;
     } catch (error) {
       throw new PhotographerCreationFailedException();
     }
-    
   }
 }
