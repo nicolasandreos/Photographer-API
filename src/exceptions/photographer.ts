@@ -35,3 +35,9 @@ export class NewPasswordCannotBeTheSameAsTheOldPasswordException extends BaseApi
         super("New password cannot be the same as the old password", 400);
     }
 }
+
+export class EmailNotVerifiedException extends BaseApiException {
+    constructor() {
+        super("Email not verified. Please verify your email to login.", 401);
+    }
+}

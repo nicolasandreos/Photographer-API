@@ -1,7 +1,7 @@
 import { LoginPhotographerRequestDTO } from "../../api/dto/request/photographer/login";
 import { LoginPhotographerResponseDTO } from "../../api/dto/response/photographer/login";
 import { IPhotographerRepository } from "../../domain/repositories/photographer";
-import { InvalidPasswordException, PhotographerNotFoundException } from "../../exceptions/photographer";
+import { EmailNotVerifiedException, InvalidPasswordException, PhotographerNotFoundException } from "../../exceptions/photographer";
 import { ITokenService, UserTokenPayload } from "../ports/token-service";
 
 export class LoginPhotographerUseCase {
@@ -14,6 +14,10 @@ export class LoginPhotographerUseCase {
         const photographer = await this.photographerRepository.getByEmail(request.email);
         if (!photographer) {
             throw new PhotographerNotFoundException();
+        }
+
+        if (!photographer.getEmailVerified()) {
+            throw new EmailNotVerifiedException();
         }
 
         const isPasswordValid = photographer.comparePassword(request.password);
