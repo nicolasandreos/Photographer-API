@@ -13,6 +13,7 @@ import { JwtTokenService } from "../adapters/jwt-token-service";
 import { ITokenService } from "../../application/ports/token-service";
 import { ChangePhotographerPasswordUseCase } from "../../application/use-cases/change-photographer-password";
 import { ISendNotificationService } from "../../application/ports/email-verification";
+import { VerifyPhotographerEmailUseCase } from "../../application/use-cases/verify-photographer-email";
 
 export class PhotographerUseCasesFactory {
   repository: IPhotographerRepository = new PrismaPhotographerRepository();
@@ -23,9 +24,10 @@ export class PhotographerUseCasesFactory {
 
   getAllPhotographersUseCase = new GetAllPhotographersUseCase(this.repository);
   getByIdPhotographerUseCase = new GetByIdPhotographerUseCase(this.repository);
-  createPhotographerUseCase = new CreatePhotographerUseCase(this.repository, this.passwordService, this.emailNofifier);
+  createPhotographerUseCase = new CreatePhotographerUseCase(this.repository, this.passwordService, this.emailNofifier, this.tokenService);
   updatePhotographerUseCase = new UpdatePhotographerUseCase(this.repository);
   deletePhotographerUseCase = new DeletePhotographerUseCase(this.repository);
   loginPhotographerUseCase = new LoginPhotographerUseCase(this.repository, this.tokenService);
   changePhotographerPasswordUseCase = new ChangePhotographerPasswordUseCase(this.passwordService, this.repository);
+  verifyEmailUseCase = new VerifyPhotographerEmailUseCase(this.tokenService, this.repository);
 }

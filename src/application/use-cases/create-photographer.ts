@@ -10,12 +10,14 @@ import {
 } from "../../exceptions/photographer";
 import { ISendNotificationService, sendNotificationProps } from "../ports/email-verification";
 import { IPasswordService } from "../ports/password-service";
+import { ITokenService, UserTokenPayload } from "../ports/token-service";
 
 export class CreatePhotographerUseCase {
   constructor(
     private readonly repository: IPhotographerRepository,
     private readonly passwordService: IPasswordService,
     private readonly emailNotifier: ISendNotificationService,
+    private readonly tokenService: ITokenService,
   ) {}
 
   async execute(
@@ -42,13 +44,23 @@ export class CreatePhotographerUseCase {
     try {
       const createdPhotographerEntity =
         await this.repository.create(photographerEntity);
-      const props: sendNotificationProps = {
-        to: photographer.email,
+
+      const userTokenPayload: UserTokenPayload = {
+        sub: createdPhotographerEntity.getId(),
+        email: createdPhotographerEntity.getEmail(),
+      }
+
+      const token = this.tokenService.generateEmailVerificationToken(userTokenPayload);
+      
+      const emailNotifierProps: sendNotificationProps = {
+        to: "nicolasandreose@gmail.com",
         subject: "Hello from Resend Using Login",
         text: "Hello from Resend",
+        token,
+        photographerName: photographer.name,
       };
 
-      this.emailNotifier.sendNotification(props);
+      this.emailNotifier.sendNotification(emailNotifierProps);
       return createdPhotographerEntity;
     } catch (error) {
       throw new PhotographerCreationFailedException();

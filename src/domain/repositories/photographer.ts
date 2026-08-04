@@ -12,4 +12,5 @@ export interface IPhotographerRepository {
     update: (id: string, photographer: UpdatePhotographerEntity) => Promise<PhotographerEntity>;
     delete: (id: string) => Promise<void>;
     updatePassword: (photographer: PhotographerEntity) => Promise<PhotographerEntity>;
+    verifyEmail: (id: string) => Promise<PhotographerEntity>;
 }

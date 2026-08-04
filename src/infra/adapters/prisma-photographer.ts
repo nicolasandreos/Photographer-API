@@ -93,4 +93,16 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
     });
     return PhotographerMapperRepository.toEntity(updatedPhotographer);
   }
+
+  async verifyEmail(id: string): Promise<PhotographerEntity> {
+    const updatedPhotographer = await db.photographer.update({
+      where: {
+        id,
+      },
+      data: {
+        emailVerified: true,
+      },
+    });
+    return PhotographerMapperRepository.toEntity(updatedPhotographer);
+  }
 }

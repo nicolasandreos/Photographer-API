@@ -13,11 +13,12 @@ export const createPhotographerRouter = (
   const router = Router();
 
   router.get("/all", createAuthMiddleware(tokenService), administratorUser(repository), controller.getAll);
-  router.get("/:id", controller.getById);
   router.post("/create", controller.create);
-  router.put("/me", createAuthMiddleware(tokenService), controller.update);
-  router.delete("/:id", controller.delete);
   router.post("/login", controller.login);
+  router.get("/verify-email", controller.verifyEmail);
+  router.put("/me", createAuthMiddleware(tokenService), controller.update);
+  router.get("/:id", controller.getById);
+  router.delete("/:id", controller.delete);
   router.put("/:id/change-password", controller.changePassword)
 
   return router;

@@ -55,6 +55,10 @@ export class PhotographerEntity {
     public updatePassword(passwordHash: string): void {
         this.props.passwordHash = passwordHash;
     }
+
+    public verifyEmail() {
+        this.props.emailVerified = !this.props.emailVerified
+    }
 }
 
 interface CreatePhotographerEntityProps {

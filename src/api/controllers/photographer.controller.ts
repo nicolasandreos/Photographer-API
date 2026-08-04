@@ -59,4 +59,25 @@ export class PhotographerController {
         const updatedPhotographerDTO = PhotographerMapperDTO.toChangePasswordResponseDTO(updatedPhotographer);
         res.status(200).json(updatedPhotographerDTO);
     }
+
+    verifyEmail = async (req: Request, res: Response) => {
+        const token = req.query.token as string;
+        await this.useCases.verifyEmailUseCase.execute(String(token));
+        return res.send(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Email confirmado</title>
+            </head>
+            <body style="
+                font-family: Arial;
+                text-align:center;
+                padding-top:50px;
+            ">
+                <h1>✅ Email confirmado</h1>
+                <p>Sua conta foi ativada com sucesso.</p>
+            </body>
+            </html>
+            `);
+    }
 }

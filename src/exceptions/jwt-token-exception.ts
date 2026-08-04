@@ -6,6 +6,12 @@ export class JwtTokenSecretKeyNotSetException extends BaseApiException {
     }
 }
 
+export class JwtEmailVerificationSecretKeyNotSetException extends BaseApiException {
+    constructor() {
+        super("JWT_EMAIL_VERIFICATION_SECRET_KEY is not set", 500);
+    }
+}
+
 export class InvalidTokenException extends BaseApiException {
     constructor() {
         super("Invalid token or expired", 401);

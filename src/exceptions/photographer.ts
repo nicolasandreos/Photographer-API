@@ -24,6 +24,12 @@ export class PhotographerEmailAlreadyExistsException extends BaseApiException {
     }
 }
 
+export class PhotographerEmailIsNotValidException extends BaseApiException {
+    constructor() {
+        super("Photographer email is not valid", 401)
+    }
+}
+
 export class InvalidPasswordException extends BaseApiException {
     constructor() {
         super("Invalid password", 401);
