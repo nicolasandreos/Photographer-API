@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { PrismaPhotographerRepository } from "../../infra/adapters/prisma-photographer";
-import { CreatePhotographerEntity, PhotographerEntity, UpdatePhotographerEntity } from "../../domain/entities/photographer";
+import { PrismaPhotographerRepository } from "../../../infra/adapters/prisma-photographer";
+import { CreatePhotographerEntity, PhotographerEntity, UpdatePhotographerEntity } from "../../../domain/entities/photographer";
 
 describe("PrismaPhotographerRepository", () => {
   const repository = new PrismaPhotographerRepository();
@@ -13,7 +13,7 @@ describe("PrismaPhotographerRepository", () => {
     expect(photographer).not.toBeNull();
     expect(photographer!.getEmail()).toBe("carla.ribeiro@momentos.fake");
     expect(photographer!.getName()).toBe("Carla Ribeiro");
-    expect(photographer!.getPhoneNumber()).toBe("+55 31 98765-0003");
+    expect(photographer!.getPhoneNumber()).toBe("31987650003");
     expect(photographer!.getStudioName()).toBeNull();
     expect(photographer!.getIsActive()).toBe(true);
     expect(photographer!.getEmailVerified()).toBe(true);
@@ -26,7 +26,7 @@ describe("PrismaPhotographerRepository", () => {
     expect(photographer!.getId()).toBe("1");
     expect(photographer!.getName()).toBe("Ana Costa");
     expect(photographer!.getEmail()).toBe("ana.costa@luzestudio.fake");
-    expect(photographer!.getPhoneNumber()).toBe("+55 11 91234-0001");
+    expect(photographer!.getPhoneNumber()).toBe("11910904129");
     expect(photographer!.getStudioName()).toBe("Luz & Sombra Fotografia");
     expect(photographer!.getIsActive()).toBe(true);
     expect(photographer!.getEmailVerified()).toBe(true);

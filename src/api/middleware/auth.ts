@@ -26,7 +26,7 @@ export const createAuthMiddleware = (tokenService: ITokenService) => {
       throw new UnauthorizedException();
     }
 
-    const payload = await tokenService.verifyToken(token);
+    const payload = tokenService.verifyToken(token);
     req.user = payload;
     next();
   };

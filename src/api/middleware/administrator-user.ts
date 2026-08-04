@@ -10,8 +10,10 @@ export const administratorUser = (repository: IAdministratorUserRepository) => {
             throw new UnauthorizedException();
         }
 
-        const administratorUser = await repository.getById(req.user.sub);
-        if (!administratorUser) {
+        const idAdministratorUser = await repository.getById(req.user.sub);
+        const emailAdministratorUser = await repository.getByEmail(req.user.email);
+        
+        if (!idAdministratorUser || !emailAdministratorUser) {
             throw new OnlyAdministratorUserException();
         }
         next();
