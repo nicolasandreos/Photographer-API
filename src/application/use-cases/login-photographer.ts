@@ -30,8 +30,8 @@ export class LoginPhotographerUseCase {
             email: photographer.getEmail(),
         }
 
-        const accessToken = await this.tokenService.generateAccessToken(userPayload);
-        const refreshToken = await this.tokenService.generateRefreshToken(userPayload);
+        const accessToken = this.tokenService.generateAccessToken(userPayload);
+        const refreshToken = this.tokenService.generateRefreshToken(userPayload);
 
         return new LoginPhotographerResponseDTO(accessToken, refreshToken);
     }
