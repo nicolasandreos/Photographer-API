@@ -1,3 +1,5 @@
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { Request, Response } from "express";
 import { PhotographerUseCasesFactory } from "../../infra/factories/photographer-use-cases.factory";
 import { PhotographerMapperDTO } from "../mappers/photographer-mapper";
@@ -6,6 +8,11 @@ import { updatePhotographerRequestSchema } from "../dto/request/photographer/upd
 import { loginPhotographerRequestSchema } from "../dto/request/photographer/login";
 import { changePhotographerPasswordRequestSchema } from "../dto/request/photographer/change-password";
 import { AuthenticatedRequest } from "../middleware/auth";
+import { PhotographerEmailAlreadyVerifiedException } from "../../exceptions/photographer";
+import {
+  EmailConfirmed,
+  EmailConfirmedVariant,
+} from "../../infra/templates/email-confirmed";
 
 export class PhotographerController {
     constructor(
@@ -62,22 +69,24 @@ export class PhotographerController {
 
     verifyEmail = async (req: Request, res: Response) => {
         const token = req.query.token as string;
-        await this.useCases.verifyEmailUseCase.execute(String(token));
-        return res.send(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Email confirmado</title>
-            </head>
-            <body style="
-                font-family: Arial;
-                text-align:center;
-                padding-top:50px;
-            ">
-                <h1>✅ Email confirmado</h1>
-                <p>Sua conta foi ativada com sucesso.</p>
-            </body>
-            </html>
-            `);
+        let variant: EmailConfirmedVariant = "success";
+
+        try {
+            await this.useCases.verifyEmailUseCase.execute(String(token));
+        } catch (error) {
+            if (error instanceof PhotographerEmailAlreadyVerifiedException) {
+                variant = "already-verified";
+            } else {
+                throw error;
+            }
+        }
+
+        const html =
+            "<!DOCTYPE html>" +
+            renderToStaticMarkup(
+                createElement(EmailConfirmed, { variant }),
+            );
+
+        res.type("html").send(html);
     }
 }

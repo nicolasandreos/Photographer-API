@@ -47,3 +47,9 @@ export class EmailNotVerifiedException extends BaseApiException {
         super("Email not verified. Please verify your email to login.", 401);
     }
 }
+
+export class PhotographerEmailAlreadyVerifiedException extends BaseApiException {
+    constructor() {
+        super("Photographer email already verified", 400);
+    }
+}

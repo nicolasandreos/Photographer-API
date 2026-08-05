@@ -1,5 +1,5 @@
 import { IPhotographerRepository } from "../../domain/repositories/photographer";
-import { PhotographerEmailIsNotValidException, PhotographerNotFoundException } from "../../exceptions/photographer";
+import { PhotographerEmailAlreadyVerifiedException, PhotographerEmailIsNotValidException, PhotographerNotFoundException } from "../../exceptions/photographer";
 import { ITokenService } from "../ports/token-service";
 
 export class VerifyPhotographerEmailUseCase {
@@ -20,6 +20,11 @@ export class VerifyPhotographerEmailUseCase {
         const isEmailValid = photographer.getEmail() === email;
         if (!isEmailValid) {
             throw new PhotographerEmailIsNotValidException();
+        }
+
+        const isEmailAlreadyVerified = photographer.getEmailVerified();
+        if (isEmailAlreadyVerified) {
+            throw new PhotographerEmailAlreadyVerifiedException();
         }
 
         photographer.verifyEmail()
