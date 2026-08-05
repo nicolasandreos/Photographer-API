@@ -57,7 +57,7 @@ export class PhotographerEntity {
     }
 
     public verifyEmail() {
-        this.props.emailVerified = !this.props.emailVerified
+        this.props.emailVerified = true;
     }
 }
 

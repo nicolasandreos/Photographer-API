@@ -53,14 +53,14 @@ export class CreatePhotographerUseCase {
       const token = this.tokenService.generateEmailVerificationToken(userTokenPayload);
       
       const emailNotifierProps: sendNotificationProps = {
-        to: "nicolasandreose@gmail.com",
+        to: photographer.email,
         subject: "Hello from Resend Using Login",
         text: "Hello from Resend",
         token,
         photographerName: photographer.name,
       };
 
-      this.emailNotifier.sendNotification(emailNotifierProps);
+      await this.emailNotifier.sendNotification(emailNotifierProps);
       return createdPhotographerEntity;
     } catch (error) {
       throw new PhotographerCreationFailedException();
