@@ -6,6 +6,7 @@ import { PhotographerEntity } from "../../../domain/entities/photographer";
 import { PhotographerAlreadyExistsException, PhotographerCreationFailedException } from "../../../exceptions/photographer";
 import { CreatePhotographerRequestDTO } from "../../../api/dto/request/photographer/create";
 import { ISendNotificationService } from "../../../application/ports/email-verification";
+import { ITokenService } from "../../../application/ports/token-service";
 
 describe("CreatePhotographerUseCase", () => {
 
@@ -14,6 +15,7 @@ describe("CreatePhotographerUseCase", () => {
     let useCase: CreatePhotographerUseCase
     let dto: CreatePhotographerRequestDTO
     let emailNotifier: ISendNotificationService
+    let tokenService: ITokenService
 
     beforeEach(() => {
         repository = {
@@ -24,6 +26,7 @@ describe("CreatePhotographerUseCase", () => {
             delete: vi.fn(),
             getAll: vi.fn(),
             updatePassword: vi.fn(),
+            verifyEmail: vi.fn(),
         }
         emailNotifier = {
             sendNotification: vi.fn()
@@ -32,6 +35,13 @@ describe("CreatePhotographerUseCase", () => {
             hash: vi.fn(),
             compare: vi.fn(),
         }
+        tokenService = {
+            generateAccessToken: vi.fn(),
+            generateRefreshToken: vi.fn(),
+            verifyToken: vi.fn(),
+            verifyEmailVerificationToken: vi.fn(),
+            generateEmailVerificationToken: vi.fn(),
+        }
         dto = {
             name: "John Doe",
             email: "john.doe@example.com",
@@ -39,7 +49,7 @@ describe("CreatePhotographerUseCase", () => {
             phoneNumber: "1234567890",
             studioName: "Studio 1",
         }
-        useCase = new CreatePhotographerUseCase(repository, passwordService, emailNotifier)
+        useCase = new CreatePhotographerUseCase(repository, passwordService, emailNotifier, tokenService)
     })
 
     it("should throw PhotographerAlreadyExistsException if photographer already exists", async () => {
