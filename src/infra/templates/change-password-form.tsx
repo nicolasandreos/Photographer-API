@@ -30,7 +30,7 @@ export function ChangePasswordForm({
   token,
   error = null,
 }: ChangePasswordFormProps) {
-  const formAction = `${process.env.CHANGE_PHOTOGRAPHER_PASSWORD_URL}?token=${encodeURIComponent(token)}`;
+  const formAction = `/photographer/change-password?token=${encodeURIComponent(token)}`;
 
   return (
     <html lang="en">
