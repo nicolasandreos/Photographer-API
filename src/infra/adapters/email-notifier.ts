@@ -4,7 +4,8 @@ import {
   ISendNotificationService,
   sendNotificationProps,
 } from "../../application/ports/email-verification";
-import { Email } from "../templates/email";
+import PendingConfirmationEmail from "../templates/pending-email-confirmation";
+import ChangePasswordEmail from "../templates/change-password-email";
 
 export class EmailNotificationAdapter implements ISendNotificationService {
   private readonly resend: Resend;
@@ -13,7 +14,7 @@ export class EmailNotificationAdapter implements ISendNotificationService {
     this.resend = new Resend(process.env.RESEND_API_KEY);
   }
 
-  sendNotification = async ({
+  sendConfirmationEmailNotification = async ({
     to,
     subject,
     text,
@@ -25,7 +26,7 @@ export class EmailNotificationAdapter implements ISendNotificationService {
       to,
       subject,
       text,
-      react: createElement(Email, { token, photographerName }),
+      react: createElement(PendingConfirmationEmail, { token, photographerName }),
     });
 
     if (error) {
@@ -34,4 +35,27 @@ export class EmailNotificationAdapter implements ISendNotificationService {
 
     console.log("Email sent successfully:", data);
   };
+
+  sendChangePasswordEmailNotification = async ({
+    to,
+    subject,
+    text,
+    token,
+    photographerName,
+  }: sendNotificationProps): Promise<void> => {
+    const { data, error } = await this.resend.emails.send({
+      from: "Photos AI <onboarding@resend.dev>",
+      to,
+      subject,
+      text,
+      react: createElement(ChangePasswordEmail, { token, photographerName }),
+    });
+
+    if (error) {
+      throw new Error(`Failed to send email: ${error.message}`);
+    }
+
+    console.log("Email sent successfully:", data);
+  };
+
 }

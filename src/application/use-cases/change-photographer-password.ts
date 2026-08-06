@@ -1,19 +1,22 @@
 import { ChangePhotographerPasswordRequestDTO } from "../../api/dto/request/photographer/change-password";
 import { IPasswordService } from "../ports/password-service";
 import { IPhotographerRepository } from "../../domain/repositories/photographer";
-import { InvalidPasswordException, NewPasswordCannotBeTheSameAsTheOldPasswordException, PhotographerNotFoundException } from "../../exceptions/photographer";
+import { InvalidPasswordException, NewPasswordCannotBeTheSameAsTheOldPasswordException, NewPasswordDoesNotMatchException, PhotographerEmailIsNotValidException, PhotographerNotFoundException } from "../../exceptions/photographer";
 import { PhotographerEntity } from "../../domain/entities/photographer";
+import { ITokenService } from "../ports/token-service";
 
 export class ChangePhotographerPasswordUseCase {
 
     constructor(
         private readonly passwordService: IPasswordService,
-        private readonly repository: IPhotographerRepository
+        private readonly repository: IPhotographerRepository,
+        private readonly tokenService: ITokenService
     ) {}
 
-    async execute(photographerId: string, changePhotographerPasswordRequest: ChangePhotographerPasswordRequestDTO): Promise<PhotographerEntity> {
-        const password = changePhotographerPasswordRequest.password;
-        const newPassword = changePhotographerPasswordRequest.newPassword;
+    async execute(token: string, newPassword: string, confirmPassword: string): Promise<PhotographerEntity> {
+        const userPayload = this.tokenService.verifyChangePasswordToken(token);
+        const photographerId = userPayload.sub;
+        const email = userPayload.email;
 
         const databasePhotographer = await this.repository.getById(photographerId);
 
@@ -21,14 +24,17 @@ export class ChangePhotographerPasswordUseCase {
             throw new PhotographerNotFoundException();
         }
 
-        const isPasswordTheSame = await this.passwordService.compare(password, databasePhotographer.getPasswordHash());
-        if (!isPasswordTheSame) {
-            throw new InvalidPasswordException();
+        const isValidEmail = databasePhotographer.getEmail() === email;
+        if (!isValidEmail) {
+            throw new PhotographerEmailIsNotValidException();
         }
 
-        const isNewPasswordTheSameAsTheOldPassword = await this.passwordService.compare(newPassword, databasePhotographer.getPasswordHash());
-        if (isNewPasswordTheSameAsTheOldPassword) {
-            throw new NewPasswordCannotBeTheSameAsTheOldPasswordException();
+        console.log("newPassword", newPassword);
+        console.log("confirmNewPassword", confirmPassword);
+
+        const isNewPasswordConfirmed = newPassword === confirmPassword;
+        if (!isNewPasswordConfirmed) {
+            throw new NewPasswordDoesNotMatchException();
         }
         
         const hashedNewPassword = await this.passwordService.hash(newPassword);

@@ -14,6 +14,7 @@ import { AdministratorUserController } from "./controllers/administrator-user.co
 export const buildApp = () => {
   const app = express();
   app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
   const tokenService = new JwtTokenService();

@@ -7,5 +7,6 @@ export interface sendNotificationProps {
 }
 
 export interface ISendNotificationService {
-    sendNotification(props: sendNotificationProps): Promise<void>;
+    sendConfirmationEmailNotification(props: sendNotificationProps): Promise<void>;
+    sendChangePasswordEmailNotification(props: sendNotificationProps): Promise<void>;
 }

@@ -53,3 +53,9 @@ export class PhotographerEmailAlreadyVerifiedException extends BaseApiException 
         super("Photographer email already verified", 400);
     }
 }
+
+export class NewPasswordDoesNotMatchException extends BaseApiException {
+    constructor() {
+        super("New password does not match", 400);
+    }
+}

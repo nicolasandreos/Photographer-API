@@ -17,9 +17,11 @@ export const createPhotographerRouter = (
   router.post("/login", controller.login);
   router.get("/verify-email", controller.verifyEmail);
   router.put("/me", createAuthMiddleware(tokenService), controller.update);
+  router.put("/send-change-password-email", createAuthMiddleware(tokenService), controller.sendChangePasswordEmail)
+  router.post("/change-password", controller.changePassword)
+  router.get("/change-password-form", controller.changePasswordForm)
   router.get("/:id", controller.getById);
   router.delete("/:id", controller.delete);
-  router.put("/:id/change-password", controller.changePassword)
 
   return router;
 };

@@ -14,6 +14,7 @@ import { ITokenService } from "../../application/ports/token-service";
 import { ChangePhotographerPasswordUseCase } from "../../application/use-cases/change-photographer-password";
 import { ISendNotificationService } from "../../application/ports/email-verification";
 import { VerifyPhotographerEmailUseCase } from "../../application/use-cases/verify-photographer-email";
+import { SendEmailPhotographerChangePasswordUseCase } from "../../application/use-cases/send-email-photographer-change-password";
 
 export class PhotographerUseCasesFactory {
   repository: IPhotographerRepository = new PrismaPhotographerRepository();
@@ -28,6 +29,7 @@ export class PhotographerUseCasesFactory {
   updatePhotographerUseCase = new UpdatePhotographerUseCase(this.repository);
   deletePhotographerUseCase = new DeletePhotographerUseCase(this.repository);
   loginPhotographerUseCase = new LoginPhotographerUseCase(this.repository, this.tokenService);
-  changePhotographerPasswordUseCase = new ChangePhotographerPasswordUseCase(this.passwordService, this.repository);
+  changePhotographerPasswordUseCase = new ChangePhotographerPasswordUseCase(this.passwordService, this.repository, this.tokenService);
   verifyEmailUseCase = new VerifyPhotographerEmailUseCase(this.tokenService, this.repository);
+  sendChangePasswordEmailUseCase = new SendEmailPhotographerChangePasswordUseCase(this.tokenService, this.repository, this.emailNofifier);
 }

@@ -7,13 +7,12 @@ import {
   Heading,
   Hr,
   Html,
-  Link,
   Preview,
   Section,
   Text,
 } from "@react-email/components";
 
-export interface EmailProps {
+export interface ChangePasswordEmailProps {
   token: string;
   photographerName: string;
 }
@@ -32,14 +31,16 @@ const colors = {
 
 const capitalizeFirstLetter = (string: string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
-}
+};
 
-export function Email({
+export function ChangePasswordEmail({
   token,
   photographerName,
-}: EmailProps) {
-  const firstName = capitalizeFirstLetter(photographerName.trim().split(/\s+/)[0]);
-  const verificationUrl = `${process.env.EMAIL_VERIFICATION_URL}?token=${token}`;
+}: ChangePasswordEmailProps) {
+  const firstName = capitalizeFirstLetter(
+    photographerName.trim().split(/\s+/)[0],
+  );
+  const changePasswordUrl = `${process.env.FORM_CHANGE_PASSWORD_URL}?token=${token}`;
 
   return (
     <Html lang="en">
@@ -86,7 +87,7 @@ export function Email({
         />
       </Head>
       <Preview>
-        Confirm your email to open your Photos AI studio — one click away.
+        Reset your Photos AI password — secure your studio in one click.
       </Preview>
       <Body style={styles.body}>
         <Container style={styles.shell}>
@@ -96,32 +97,32 @@ export function Email({
           </Section>
 
           <Section style={styles.card}>
-            <Text style={styles.eyebrow}>Email verification</Text>
+            <Text style={styles.eyebrow}>Password reset</Text>
 
             <Heading as="h1" style={styles.heading}>
-              Welcome to the{" "}
-              <span style={styles.headingAccent}>golden hour</span>, {firstName}.
+              Time for a{" "}
+              <span style={styles.headingAccent}>fresh key</span>, {firstName}.
             </Heading>
 
             <Text style={styles.bodyCopy}>
-              Your account is ready. Confirm this email address to unlock your
-              studio, start organizing shoots, and let Photos AI handle the
-              heavy lifting behind every frame.
+              We received a request to change the password on your Photos AI
+              account. Click below to choose a new one and keep your studio
+              locked down.
             </Text>
 
             <Section style={styles.ctaWrap}>
-              <Button href={verificationUrl} style={styles.button}>
-                Confirm email address
+              <Button href={changePasswordUrl} style={styles.button}>
+                Change password
               </Button>
             </Section>
 
             <Text style={styles.helper}>
-              This link expires in 24 hours. If you did not create a Photos AI
-              account, you can safely ignore this message.
+              This link expires in 1 hour. If you did not ask to change your
+              password, you can safely ignore this message — your account stays
+              as it is.
             </Text>
 
             <Hr style={styles.divider} />
-
           </Section>
 
           <Section style={styles.footer}>
@@ -139,7 +140,7 @@ export function Email({
   );
 }
 
-export default Email;
+export default ChangePasswordEmail;
 
 const styles = {
   body: {
@@ -148,7 +149,7 @@ const styles = {
     backgroundColor: colors.ink,
     backgroundImage:
       "radial-gradient(ellipse at 20% 0%, #2a2318 0%, transparent 55%), radial-gradient(ellipse at 80% 100%, #1a1610 0%, transparent 50%)",
-    fontFamily: 'Outfit, Helvetica, Arial, sans-serif',
+    fontFamily: "Outfit, Helvetica, Arial, sans-serif",
   },
   shell: {
     margin: "0 auto",
@@ -223,7 +224,7 @@ const styles = {
     borderRadius: "2px",
     color: colors.softWhite,
     display: "inline-block",
-    fontFamily: 'Outfit, Helvetica, Arial, sans-serif',
+    fontFamily: "Outfit, Helvetica, Arial, sans-serif",
     fontSize: "14px",
     fontWeight: 500,
     letterSpacing: "0.08em",
@@ -243,26 +244,6 @@ const styles = {
     borderColor: colors.parchmentMuted,
     borderTop: `1px solid ${colors.parchmentMuted}`,
     margin: "32px 0 24px",
-  },
-  fallbackLabel: {
-    margin: "0 0 6px",
-    color: colors.espresso,
-    fontSize: "12px",
-    fontWeight: 500,
-    letterSpacing: "0.06em",
-    textTransform: "uppercase" as const,
-  },
-  fallbackCopy: {
-    margin: "0 0 8px",
-    color: colors.warmGray,
-    fontSize: "13px",
-    lineHeight: "1.5",
-  },
-  fallbackLink: {
-    color: colors.brassDeep,
-    fontSize: "12px",
-    lineHeight: "1.5",
-    wordBreak: "break-all" as const,
   },
   footer: {
     padding: "32px 8px 0",

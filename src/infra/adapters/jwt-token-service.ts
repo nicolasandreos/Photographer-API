@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { ITokenService, UserTokenPayload } from "../../application/ports/token-service";
-import { InvalidTokenException, JwtEmailVerificationSecretKeyNotSetException, JwtTokenSecretKeyNotSetException } from "../../exceptions/jwt-token-exception";
+import { InvalidTokenException, JwtChangePasswordSecretKeyNotSetException, JwtEmailVerificationSecretKeyNotSetException, JwtTokenSecretKeyNotSetException } from "../../exceptions/jwt-token-exception";
 
 export class JwtTokenService implements ITokenService {
 
@@ -18,6 +18,13 @@ export class JwtTokenService implements ITokenService {
         return process.env.JWT_EMAIL_VERIFICATION_SECRET_KEY as string;
     }
 
+    static verifyChangePasswordSecretKey(): string {
+        if (!process.env.JWT_CHANGE_PASSWORD_SECRET_KEY) {
+            throw new JwtChangePasswordSecretKeyNotSetException();
+        }
+        return process.env.JWT_CHANGE_PASSWORD_SECRET_KEY as string;
+    }
+
     generateAccessToken(userPayload: UserTokenPayload): string {
         const secret = JwtTokenService.verifySecretKey();
 
@@ -33,17 +40,10 @@ export class JwtTokenService implements ITokenService {
     }
 
     verifyToken(token: string): UserTokenPayload {
-        try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as string) as UserTokenPayload;
-            return decoded;
-        } catch (error) {
-            throw new InvalidTokenException();
-        }
-    }
+        const secret = JwtTokenService.verifySecretKey();
 
-    verifyEmailVerificationToken(token: string): UserTokenPayload {
         try {
-            const decoded = jwt.verify(token, process.env.JWT_EMAIL_VERIFICATION_SECRET_KEY as string) as UserTokenPayload;
+            const decoded = jwt.verify(token, secret) as UserTokenPayload;
             return decoded;
         } catch (error) {
             throw new InvalidTokenException();
@@ -57,5 +57,33 @@ export class JwtTokenService implements ITokenService {
         return token;
     }
 
+    verifyEmailVerificationToken(token: string): UserTokenPayload {
+        const secret = JwtTokenService.verifyEmailVerificationSecretKey();
+        try {
+            const decoded = jwt.verify(token, secret) as UserTokenPayload;
+            return decoded;
+        } catch (error) {
+            throw new InvalidTokenException();
+        }
+    }
+
+
+    generateChangePasswordToken(userPayload: UserTokenPayload): string {
+        const secret = JwtTokenService.verifyChangePasswordSecretKey();
+
+        const token = jwt.sign(userPayload, secret, { expiresIn: "1h"});
+        return token;
+    }
+
+    verifyChangePasswordToken(token: string): UserTokenPayload {
+        const secret = JwtTokenService.verifyChangePasswordSecretKey();
+
+        try {
+            const decoded = jwt.verify(token, secret) as UserTokenPayload;
+            return decoded;
+        } catch (error) {
+            throw new InvalidTokenException();
+        }
+    }
 
 }

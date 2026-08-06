@@ -13,6 +13,8 @@ import {
   EmailConfirmed,
   EmailConfirmedVariant,
 } from "../../infra/templates/email-confirmed";
+import { UserTokenPayload } from "../../application/ports/token-service";
+import ChangePasswordForm from "../../infra/templates/change-password-form";
 
 export class PhotographerController {
     constructor(
@@ -60,9 +62,9 @@ export class PhotographerController {
     }
 
     changePassword = async (req: Request, res: Response) => {
-        const { id } = req.params;
-        const request = changePhotographerPasswordRequestSchema.parse(req.body);
-        const updatedPhotographer = await this.useCases.changePhotographerPasswordUseCase.execute(String(id), request);
+        const token = req.query.token as string;
+        const { newPassword, confirmPassword } = req.body;
+        const updatedPhotographer = await this.useCases.changePhotographerPasswordUseCase.execute(String(token), newPassword, confirmPassword);
         const updatedPhotographerDTO = PhotographerMapperDTO.toChangePasswordResponseDTO(updatedPhotographer);
         res.status(200).json(updatedPhotographerDTO);
     }
@@ -87,6 +89,22 @@ export class PhotographerController {
                 createElement(EmailConfirmed, { variant }),
             );
 
+        res.type("html").send(html);
+    }
+
+    sendChangePasswordEmail = async (req: AuthenticatedRequest, res: Response) => {
+        const userPayload = req.user as UserTokenPayload;
+        await this.useCases.sendChangePasswordEmailUseCase.execute(userPayload);
+        res.status(200).json({ message: "Change password email sent successfully" });
+    }
+
+    changePasswordForm = async (req: Request, res: Response) => {
+        const token = req.query.token as string;
+        const html =
+            "<!DOCTYPE html>" +
+            renderToStaticMarkup(
+                createElement(ChangePasswordForm, { token }),
+            );
         res.type("html").send(html);
     }
 }

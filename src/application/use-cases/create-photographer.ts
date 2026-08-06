@@ -60,7 +60,7 @@ export class CreatePhotographerUseCase {
         photographerName: photographer.name,
       };
 
-      await this.emailNotifier.sendNotification(emailNotifierProps);
+      await this.emailNotifier.sendConfirmationEmailNotification(emailNotifierProps);
       return createdPhotographerEntity;
     } catch (error) {
       throw new PhotographerCreationFailedException();
