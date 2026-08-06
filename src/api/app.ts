@@ -7,9 +7,12 @@ import { PrismaAdministratorUserRepository } from "../infra/adapters/prisma-admi
 import { AdministratorUserUseCasesFactory } from "../infra/factories/administrator-user-use-cases-factory";
 import { PhotographerController } from "./controllers/photographer.controller";
 import { PhotographerUseCasesFactory } from "../infra/factories/photographer-use-cases.factory";
+import { AuthUseCasesFactory } from "../infra/factories/auth-use-cases.factory";
 import { createPhotographerRouter } from "./routes/photographer.routes";
 import { createAdministratorUserRoutes } from "./routes/administrator-user.routes";
+import { createAuthRouter } from "./routes/auth.routes";
 import { AdministratorUserController } from "./controllers/administrator-user.controller";
+import { AuthController } from "./controllers/auth.controller";
 
 export const buildApp = () => {
   const app = express();
@@ -24,6 +27,7 @@ export const buildApp = () => {
   const photographerUseCasesFactory = new PhotographerUseCasesFactory();
   const administratorUserUseCasesFactory =
     new AdministratorUserUseCasesFactory();
+  const authUseCasesFactory = new AuthUseCasesFactory();
 
   const photographerController = new PhotographerController(
     photographerUseCasesFactory,
@@ -31,6 +35,7 @@ export const buildApp = () => {
   const administratorUserController = new AdministratorUserController(
     administratorUserUseCasesFactory,
   );
+  const authController = new AuthController(authUseCasesFactory);
 
   const photographerRouter = createPhotographerRouter(
     photographerController,
@@ -40,9 +45,11 @@ export const buildApp = () => {
   const administratorUserRouter = createAdministratorUserRoutes(
     administratorUserController,
   );
+  const authRouter = createAuthRouter(authController);
 
   app.use("/photographer", photographerRouter);
   app.use("/administrator-user", administratorUserRouter);
+  app.use("/auth", authRouter);
 
   app.use(BaseApiExceptionHandler);
   return app;

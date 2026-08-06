@@ -65,7 +65,7 @@ describe("Photographer API", () => {
   it("should create a new photographer", async () => {
     const requestBody = {
         name: "John Doe",
-        email: "john.doe@example.com",
+        email: "delivered@resend.dev",
         password: "123456",
         phoneNumber: "11910908312",
         studioName: "John Doe Studio",
@@ -75,7 +75,7 @@ describe("Photographer API", () => {
     expect(response.body).toEqual({
         id: expect.any(String),
         name: "John Doe",
-        email: "john.doe@example.com",
+        email: "delivered@resend.dev",
         phoneNumber: "11910908312",
         studioName: "John Doe Studio",
         isActive: true,

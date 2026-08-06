@@ -18,6 +18,12 @@ export class JwtChangePasswordSecretKeyNotSetException extends BaseApiException 
     }
 }
 
+export class JwtRefreshSecretKeyNotSetException extends BaseApiException {
+    constructor() {
+        super("JWT_REFRESH_SECRET_KEY is not set", 500);
+    }
+}
+
 export class InvalidTokenException extends BaseApiException {
     constructor() {
         super("Invalid token or expired", 401);

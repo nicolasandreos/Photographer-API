@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { ITokenService, UserTokenPayload } from "../../application/ports/token-service";
-import { InvalidTokenException, JwtChangePasswordSecretKeyNotSetException, JwtEmailVerificationSecretKeyNotSetException, JwtTokenSecretKeyNotSetException } from "../../exceptions/jwt-token-exception";
+import { InvalidTokenException, JwtChangePasswordSecretKeyNotSetException, JwtEmailVerificationSecretKeyNotSetException, JwtRefreshSecretKeyNotSetException, JwtTokenSecretKeyNotSetException } from "../../exceptions/jwt-token-exception";
 
 export class JwtTokenService implements ITokenService {
 
@@ -9,6 +9,13 @@ export class JwtTokenService implements ITokenService {
             throw new JwtTokenSecretKeyNotSetException();
         }
         return process.env.JWT_SECRET_KEY as string;
+    }
+
+    static verifyRefreshSecretKey(): string {
+        if (!process.env.JWT_REFRESH_SECRET_KEY) {
+            throw new JwtRefreshSecretKeyNotSetException();
+        }
+        return process.env.JWT_REFRESH_SECRET_KEY as string;
     }
 
     static verifyEmailVerificationSecretKey(): string {
@@ -33,7 +40,7 @@ export class JwtTokenService implements ITokenService {
     }
 
     generateRefreshToken(userPayload: UserTokenPayload): string {
-        const secret = JwtTokenService.verifySecretKey();
+        const secret = JwtTokenService.verifyRefreshSecretKey();
 
         const token = jwt.sign(userPayload, secret, { expiresIn: "7d" });
         return token;
@@ -41,6 +48,17 @@ export class JwtTokenService implements ITokenService {
 
     verifyToken(token: string): UserTokenPayload {
         const secret = JwtTokenService.verifySecretKey();
+
+        try {
+            const decoded = jwt.verify(token, secret) as UserTokenPayload;
+            return decoded;
+        } catch (error) {
+            throw new InvalidTokenException();
+        }
+    }
+
+    verifyRefreshToken(token: string): UserTokenPayload {
+        const secret = JwtTokenService.verifyRefreshSecretKey();
 
         try {
             const decoded = jwt.verify(token, secret) as UserTokenPayload;

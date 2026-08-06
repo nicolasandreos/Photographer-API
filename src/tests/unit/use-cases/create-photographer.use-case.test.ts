@@ -29,7 +29,8 @@ describe("CreatePhotographerUseCase", () => {
             verifyEmail: vi.fn(),
         }
         emailNotifier = {
-            sendNotification: vi.fn()
+            sendConfirmationEmailNotification: vi.fn(),
+            sendChangePasswordEmailNotification: vi.fn(),
         }
         passwordService = {
             hash: vi.fn(),
@@ -39,8 +40,11 @@ describe("CreatePhotographerUseCase", () => {
             generateAccessToken: vi.fn(),
             generateRefreshToken: vi.fn(),
             verifyToken: vi.fn(),
+            verifyRefreshToken: vi.fn(),
             verifyEmailVerificationToken: vi.fn(),
             generateEmailVerificationToken: vi.fn(),
+            generateChangePasswordToken: vi.fn(),
+            verifyChangePasswordToken: vi.fn(),
         }
         dto = {
             name: "John Doe",

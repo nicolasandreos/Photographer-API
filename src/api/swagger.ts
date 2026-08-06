@@ -168,6 +168,31 @@ export const swaggerSpec = swaggerJsdoc({
                     },
                 },
             },
+            "/auth/refresh": {
+                post: {
+                    summary: "Refresh access token using a valid refresh token",
+                    requestBody: {
+                        required: true,
+                        content: {
+                            "application/json": {
+                                schema: {
+                                    type: "object",
+                                    properties: {
+                                        refreshToken: { type: "string" },
+                                    },
+                                    required: ["refreshToken"],
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        "200": { description: "New access token issued" },
+                        "401": { description: "Invalid or expired refresh token" },
+                        "400": { description: "Validation error" },
+                        "500": { description: "Internal server error" },
+                    },
+                },
+            },
             "/administrator-user/login": {
                 post: {
                     summary: "Login a administrator user",
