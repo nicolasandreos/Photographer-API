@@ -27,8 +27,19 @@ services:
     volumes:
       - mysql_volume_test:/var/lib/mysql
 
+  redis:
+    image: redis:7-alpine
+    container_name: redis_database
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_volume:/data
+    command: redis-server --appendonly yes
+
 volumes:
   mysql_volume:
     driver: local
   mysql_volume_test:
+    driver: local
+  redis_volume:
     driver: local
