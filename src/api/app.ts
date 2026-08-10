@@ -13,6 +13,8 @@ import { createAdministratorUserRoutes } from "./routes/administrator-user.route
 import { createAuthRouter } from "./routes/auth.routes";
 import { AdministratorUserController } from "./controllers/administrator-user.controller";
 import { AuthController } from "./controllers/auth.controller";
+import { RedisRateLimiter } from "../infra/adapters/redis-rate-limiter";
+import { getRedisClient } from "../infra/database/redis-client";
 
 export const buildApp = () => {
   const app = express();
@@ -21,6 +23,8 @@ export const buildApp = () => {
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
   const tokenService = new JwtTokenService();
+
+  const rateLimiter = new RedisRateLimiter(getRedisClient())
 
   const administratorUserRepository = new PrismaAdministratorUserRepository();
 
@@ -41,6 +45,7 @@ export const buildApp = () => {
     photographerController,
     tokenService,
     administratorUserRepository,
+    rateLimiter,
   );
   const administratorUserRouter = createAdministratorUserRoutes(
     administratorUserController,
