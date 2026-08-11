@@ -4,6 +4,8 @@ import { CreatePhotographerResponseDTO } from "../dto/response/photographer/crea
 import { GetAllPhotographersResponseDTO } from "../dto/response/photographer/get-all";
 import { GetByIdPhotographerResponseDTO } from "../dto/response/photographer/get-by-id";
 import { UpdatePhotographerResponseDTO } from "../dto/response/photographer/update";
+import { UploadPhotographerProfilePictureResponseDTO } from "../dto/response/photographer/upload-profile-picture";
+import { buildProfilePictureUrl } from "../utils/profile-picture-url";
 
 export class PhotographerMapperDTO {
     constructor() {}
@@ -25,7 +27,8 @@ export class PhotographerMapperDTO {
             photographerEntity.getPhoneNumber(),
             photographerEntity.getStudioName(),
             photographerEntity.getIsActive(),
-            photographerEntity.getEmailVerified()
+            photographerEntity.getEmailVerified(),
+            buildProfilePictureUrl(photographerEntity.getProfilePictureBlobName())
         );
     }
 
@@ -46,7 +49,8 @@ export class PhotographerMapperDTO {
             photographerEntity.getName(),
             photographerEntity.getEmail(),
             photographerEntity.getPhoneNumber(),
-            photographerEntity.getStudioName()
+            photographerEntity.getStudioName(),
+            buildProfilePictureUrl(photographerEntity.getProfilePictureBlobName())
         );
     }
 
@@ -57,6 +61,14 @@ export class PhotographerMapperDTO {
             photographerEntity.getPhoneNumber(),
             photographerEntity.getStudioName(),
             photographerEntity.getPasswordHash()
+        );
+    }
+
+    static toUploadProfilePictureResponseDTO(
+        photographerEntity: PhotographerEntity,
+    ): UploadPhotographerProfilePictureResponseDTO {
+        return new UploadPhotographerProfilePictureResponseDTO(
+            buildProfilePictureUrl(photographerEntity.getProfilePictureBlobName()),
         );
     }
 }

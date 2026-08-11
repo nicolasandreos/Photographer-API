@@ -10,6 +10,15 @@ export const swaggerSpec = swaggerJsdoc({
             version: "1.0.0",
         },
         servers: [{ url: `http://localhost:${port}` }],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT",
+                },
+            },
+        },
         paths: {
             "/photographer/all": {
                 get: {
@@ -76,6 +85,36 @@ export const swaggerSpec = swaggerJsdoc({
                     responses: {
                         "200": { description: "Photographer updated" },
                         "400": { description: "Bad request" },
+                        "404": { description: "Photographer not found" },
+                        "500": { description: "Internal server error" },
+                    },
+                },
+            },
+            "/photographer/me/profile-picture": {
+                put: {
+                    summary: "Upload photographer profile picture",
+                    security: [{ bearerAuth: [] }],
+                    requestBody: {
+                        required: true,
+                        content: {
+                            "multipart/form-data": {
+                                schema: {
+                                    type: "object",
+                                    required: ["photo"],
+                                    properties: {
+                                        photo: {
+                                            type: "string",
+                                            format: "binary",
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        "200": { description: "Profile picture uploaded" },
+                        "400": { description: "Bad request" },
+                        "401": { description: "Unauthorized" },
                         "404": { description: "Photographer not found" },
                         "500": { description: "Internal server error" },
                     },

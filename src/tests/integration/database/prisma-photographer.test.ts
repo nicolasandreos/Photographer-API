@@ -81,6 +81,7 @@ describe("PrismaPhotographerRepository", () => {
       passwordHash: "hashedPassword",
       isActive: true,
       emailVerified: true,
+      profilePictureBlobName: null,
     }));
 
     expect(photographer.getPasswordHash()).toBe("hashedPassword");

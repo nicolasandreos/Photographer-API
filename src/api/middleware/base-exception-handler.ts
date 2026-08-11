@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from "express";
+import { MulterError } from "multer";
 import { BaseApiException } from "../../exceptions/base-exception"
 import { ZodError } from "zod";
 
-export const BaseApiExceptionHandler = (err: BaseApiException | ZodError, req: Request, res: Response, next: NextFunction) => {
+export const BaseApiExceptionHandler = (err: BaseApiException | ZodError | MulterError, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof BaseApiException) {
         res.status(err.statusCode).json({
             success: false,
@@ -23,6 +24,17 @@ export const BaseApiExceptionHandler = (err: BaseApiException | ZodError, req: R
                     issue.message,
                 ]),
             ),
+        })
+        return;
+    }
+
+    if (err instanceof MulterError) {
+        res.status(400).json({
+            success: false,
+            message: err.code === "LIMIT_FILE_SIZE"
+                ? "Profile picture exceeds the maximum size of 5MB"
+                : err.message,
+            statusCode: 400,
         })
         return;
     }

@@ -9,6 +9,7 @@ interface PhotographerEntityProps {
     studioName: string | null;
     isActive: boolean;
     emailVerified: boolean;
+    profilePictureBlobName: string | null;
 }
 
 export class PhotographerEntity {
@@ -59,6 +60,10 @@ export class PhotographerEntity {
     public verifyEmail() {
         this.props.emailVerified = true;
     }
+
+    public getProfilePictureBlobName(): string | null {
+        return this.props.profilePictureBlobName;
+    }
 }
 
 interface CreatePhotographerEntityProps {
@@ -100,6 +105,7 @@ interface UpdatePhotographerEntityProps {
     email?: string;
     phoneNumber?: string;
     studioName?: string | null;
+    profilePictureBlobName?: string | null;
 }
 
 export class UpdatePhotographerEntity {
@@ -121,5 +127,9 @@ export class UpdatePhotographerEntity {
 
     public getStudioName(): string | null | undefined {
         return this.props.studioName;
+    }
+
+    public getProfilePictureBlobName(): string | null | undefined {
+        return this.props.profilePictureBlobName;
     }
 }

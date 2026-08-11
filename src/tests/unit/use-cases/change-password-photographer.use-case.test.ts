@@ -75,6 +75,7 @@ describe("ChangePhotographerPasswordUseCase", () => {
       studioName: "Studio 1",
       isActive: true,
       emailVerified: true,
+      profilePictureBlobName: null,
     });
     vi.mocked(repository.getById).mockResolvedValue(databasePhotographer);
     await expect(
@@ -92,6 +93,7 @@ describe("ChangePhotographerPasswordUseCase", () => {
       studioName: "Studio 1",
       isActive: true,
       emailVerified: true,
+      profilePictureBlobName: null,
     });
     vi.mocked(repository.getById).mockResolvedValue(databasePhotographer);
     await expect(
@@ -109,6 +111,7 @@ describe("ChangePhotographerPasswordUseCase", () => {
       studioName: "Studio 1",
       isActive: true,
       emailVerified: true,
+      profilePictureBlobName: null,
     });
     vi.mocked(repository.getById).mockResolvedValue(databasePhotographer);
     const newHashedPassword = "new-hashed-password";
@@ -122,6 +125,7 @@ describe("ChangePhotographerPasswordUseCase", () => {
       studioName: "Studio 1",
       isActive: true,
       emailVerified: true,
+      profilePictureBlobName: null,
     });
     vi.mocked(repository.updatePassword).mockResolvedValue(updatedPhotographer);
 

@@ -4,5 +4,6 @@ export class UpdatePhotographerResponseDTO {
         public readonly email: string,
         public readonly phoneNumber: string,
         public readonly studioName: string | null,
+        public readonly profilePictureUrl: string | null = null,
     ) {}
 }

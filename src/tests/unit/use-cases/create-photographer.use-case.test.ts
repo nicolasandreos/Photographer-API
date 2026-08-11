@@ -67,6 +67,7 @@ describe("CreatePhotographerUseCase", () => {
             studioName: dto.studioName ?? null,
             isActive: true,
             emailVerified: true,
+            profilePictureBlobName: null,
         })
 
         vi.mocked(repository.getByEmail).mockResolvedValue(photographer)
@@ -88,6 +89,7 @@ describe("CreatePhotographerUseCase", () => {
             studioName: dto.studioName ?? null,
             isActive: true,
             emailVerified: true,
+            profilePictureBlobName: null,
         })
 
         vi.mocked(repository.create).mockResolvedValue(photographer);
@@ -117,6 +119,7 @@ describe("CreatePhotographerUseCase", () => {
             studioName: dto.studioName ?? null,
             isActive: true,
             emailVerified: true,
+            profilePictureBlobName: null,
         })
         vi.mocked(repository.create).mockResolvedValue(createdPhotographerEntity);
         const result = await useCase.execute(dto);

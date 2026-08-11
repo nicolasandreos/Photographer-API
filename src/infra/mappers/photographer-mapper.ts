@@ -12,6 +12,7 @@ export class PhotographerMapperRepository {
       studioName: photographer.studioName,
       isActive: photographer.isActive,
       emailVerified: photographer.emailVerified,
+      profilePictureBlobName: photographer.profilePictureBlobName,
     });
   }
 }

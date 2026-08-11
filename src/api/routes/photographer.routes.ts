@@ -6,6 +6,7 @@ import { administratorUser } from "../middleware/administrator-user";
 import { IAdministratorUserRepository } from "../../domain/repositories/administrator-user";
 import { rateLimiterMiddleware } from "../middleware/rate-limiter";
 import { IRateLimiter } from "../../application/ports/rate-limiter";
+import { uploadProfilePictureMiddleware } from "../middleware/upload-profile-picture";
 
 export const createPhotographerRouter = (
   controller: PhotographerController,
@@ -19,6 +20,12 @@ export const createPhotographerRouter = (
   router.post("/create", controller.create);
   router.post("/login", rateLimiterMiddleware(rateLimiter, "login"), controller.login);
   router.get("/verify-email", controller.verifyEmail);
+  router.put(
+    "/me/profile-picture",
+    createAuthMiddleware(tokenService),
+    uploadProfilePictureMiddleware,
+    controller.uploadProfilePicture,
+  );
   router.put("/me", createAuthMiddleware(tokenService), controller.update);
   router.put("/send-change-password-email", createAuthMiddleware(tokenService), controller.sendChangePasswordEmail)
   router.post("/change-password", controller.changePassword)

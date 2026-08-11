@@ -8,7 +8,10 @@ import { updatePhotographerRequestSchema } from "../dto/request/photographer/upd
 import { loginPhotographerRequestSchema } from "../dto/request/photographer/login";
 import { changePhotographerPasswordRequestSchema } from "../dto/request/photographer/change-password";
 import { AuthenticatedRequest } from "../middleware/auth";
-import { PhotographerEmailAlreadyVerifiedException } from "../../exceptions/photographer";
+import {
+  PhotographerEmailAlreadyVerifiedException,
+  ProfilePictureRequiredException,
+} from "../../exceptions/photographer";
 import {
   EmailConfirmed,
   EmailConfirmedVariant,
@@ -47,6 +50,27 @@ export class PhotographerController {
         const updatedPhotographerEntity = await this.useCases.updatePhotographerUseCase.execute(id, request);
         const updatedPhotographerDTO = PhotographerMapperDTO.toUpdateResponseDTO(updatedPhotographerEntity);
         res.status(200).json(updatedPhotographerDTO);
+    }
+
+    uploadProfilePicture = async (req: AuthenticatedRequest, res: Response) => {
+        const id = req.user?.sub as string;
+
+        if (!req.file) {
+            throw new ProfilePictureRequiredException();
+        }
+
+        const updatedPhotographerEntity =
+            await this.useCases.uploadPhotographerProfilePhotoUseCase.execute(
+                id,
+                req.file.buffer,
+                req.file.mimetype,
+            );
+
+        res.status(200).json(
+            PhotographerMapperDTO.toUploadProfilePictureResponseDTO(
+                updatedPhotographerEntity,
+            ),
+        );
     }
 
     delete = async (req: Request, res: Response) => {

@@ -15,6 +15,9 @@ import { ChangePhotographerPasswordUseCase } from "../../application/use-cases/c
 import { ISendNotificationService } from "../../application/ports/email-verification";
 import { VerifyPhotographerEmailUseCase } from "../../application/use-cases/verify-photographer-email";
 import { SendEmailPhotographerChangePasswordUseCase } from "../../application/use-cases/send-email-photographer-change-password";
+import { UploadPhotographerProfilePhotoUseCase } from "../../application/use-cases/upload-photographer-picture";
+import { AzureStorageAdapter } from "../adapters/azure-storage";
+import { IUploadFile } from "../../application/ports/upload-file";
 
 export class PhotographerUseCasesFactory {
   repository: IPhotographerRepository = new PrismaPhotographerRepository();
@@ -22,7 +25,8 @@ export class PhotographerUseCasesFactory {
   passwordService: IPasswordService = new PasswordService();
   tokenService: ITokenService = new JwtTokenService();
   emailNofifier: ISendNotificationService = new EmailNotificationAdapter();
-
+  uploadFile: IUploadFile = new AzureStorageAdapter();
+  
   getAllPhotographersUseCase = new GetAllPhotographersUseCase(this.repository);
   getByIdPhotographerUseCase = new GetByIdPhotographerUseCase(this.repository);
   createPhotographerUseCase = new CreatePhotographerUseCase(this.repository, this.passwordService, this.emailNofifier, this.tokenService);
@@ -32,4 +36,5 @@ export class PhotographerUseCasesFactory {
   changePhotographerPasswordUseCase = new ChangePhotographerPasswordUseCase(this.passwordService, this.repository, this.tokenService);
   verifyEmailUseCase = new VerifyPhotographerEmailUseCase(this.tokenService, this.repository);
   sendChangePasswordEmailUseCase = new SendEmailPhotographerChangePasswordUseCase(this.tokenService, this.repository, this.emailNofifier);
+  uploadPhotographerProfilePhotoUseCase = new UploadPhotographerProfilePhotoUseCase(this.uploadFile, this.repository);
 }

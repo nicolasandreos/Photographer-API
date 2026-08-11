@@ -7,5 +7,6 @@ export class GetByIdPhotographerResponseDTO {
         public readonly studioName: string | null,
         public readonly isActive: boolean,
         public readonly emailVerified: boolean,
+        public readonly profilePictureUrl: string | null,
     ) {}
 }

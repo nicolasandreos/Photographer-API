@@ -68,6 +68,7 @@ export class PrismaPhotographerRepository implements IPhotographerRepository {
         email: photographer.getEmail(),
         phoneNumber: photographer.getPhoneNumber(),
         studioName: photographer.getStudioName(),
+        profilePictureBlobName: photographer.getProfilePictureBlobName(),
       },
     });
 

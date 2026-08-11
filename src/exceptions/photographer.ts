@@ -59,3 +59,15 @@ export class NewPasswordDoesNotMatchException extends BaseApiException {
         super("New password does not match", 400);
     }
 }
+
+export class InvalidExtensionException extends BaseApiException {
+    constructor() {
+        super("Invalid extension", 400);
+    }
+}
+
+export class ProfilePictureRequiredException extends BaseApiException {
+    constructor() {
+        super("Profile picture is required", 400);
+    }
+}

@@ -20,6 +20,7 @@ describe("Photographer API", () => {
         studioName: "Luz & Sombra Fotografia",
         isActive: true,
         emailVerified: true,
+        profilePictureUrl: null,
     });
   })
 
@@ -111,7 +112,7 @@ describe("Photographer API", () => {
         .set("Authorization", `Bearer ${token}`)
         .send(requestBody);
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(requestBody);
+    expect(response.body).toEqual({...requestBody, profilePictureUrl: null});
   })
 
   it("should delete a photographer", async () => {
