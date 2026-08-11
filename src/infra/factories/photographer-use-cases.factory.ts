@@ -18,13 +18,14 @@ import { SendEmailPhotographerChangePasswordUseCase } from "../../application/us
 import { UploadPhotographerProfilePhotoUseCase } from "../../application/use-cases/upload-photographer-picture";
 import { AzureStorageAdapter } from "../adapters/azure-storage";
 import { IUploadFile } from "../../application/ports/upload-file";
+import { QueuedEmailNotifier } from "../adapters/queued-email-notifier";
 
 export class PhotographerUseCasesFactory {
   repository: IPhotographerRepository = new PrismaPhotographerRepository();
   
   passwordService: IPasswordService = new PasswordService();
   tokenService: ITokenService = new JwtTokenService();
-  emailNofifier: ISendNotificationService = new EmailNotificationAdapter();
+  emailNofifier: ISendNotificationService = new QueuedEmailNotifier();
   uploadFile: IUploadFile = new AzureStorageAdapter();
   
   getAllPhotographersUseCase = new GetAllPhotographersUseCase(this.repository);
