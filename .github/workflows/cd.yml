@@ -1,7 +1,3 @@
-# Required GitHub secrets:
-#   AZURE_CREDENTIALS  — JSON do service principal (azure/login)
-#   ACR_USERNAME       — photographeraiacr
-#   ACR_PASSWORD       — senha admin do ACR
 name: CD
 
 on:
