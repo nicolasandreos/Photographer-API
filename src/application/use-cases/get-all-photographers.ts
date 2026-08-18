@@ -6,6 +6,7 @@ export class GetAllPhotographersUseCase {
 
   async execute(): Promise<PhotographerEntity[]> {
     const photographers = await this.repository.getAll();
+    const test_variable: string = 34;
     return photographers;
   }
 }
