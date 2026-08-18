@@ -52,7 +52,7 @@ export class JwtTokenService implements ITokenService {
         try {
             const decoded = jwt.verify(token, secret) as UserTokenPayload;
             return decoded;
-        } catch (error) {
+        } catch {
             throw new InvalidTokenException();
         }
     }
@@ -63,7 +63,7 @@ export class JwtTokenService implements ITokenService {
         try {
             const decoded = jwt.verify(token, secret) as UserTokenPayload;
             return decoded;
-        } catch (error) {
+        } catch {
             throw new InvalidTokenException();
         }
     }
@@ -80,7 +80,7 @@ export class JwtTokenService implements ITokenService {
         try {
             const decoded = jwt.verify(token, secret) as UserTokenPayload;
             return decoded;
-        } catch (error) {
+        } catch {
             throw new InvalidTokenException();
         }
     }
@@ -99,7 +99,7 @@ export class JwtTokenService implements ITokenService {
         try {
             const decoded = jwt.verify(token, secret) as UserTokenPayload;
             return decoded;
-        } catch (error) {
+        } catch {
             throw new InvalidTokenException();
         }
     }

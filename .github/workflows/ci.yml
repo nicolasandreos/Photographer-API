@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Lint, typecheck and tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Create test env file
+        run: |
+          cat > .env.test << 'EOF'
+          DATABASE_URL=mysql://root:root@127.0.0.1:3311/photostudio_test
+          DATABASE_HOST=127.0.0.1
+          DATABASE_USER=root
+          DATABASE_PASSWORD=root
+          DATABASE_NAME=photostudio_test
+          DATABASE_PORT=3311
+          JWT_SECRET_KEY=test-secret-key
+          JWT_REFRESH_SECRET_KEY=test-refresh-secret-key
+          JWT_EMAIL_VERIFICATION_SECRET_KEY=test-email-verification-secret-key
+          JWT_CHANGE_PASSWORD_SECRET_KEY=test-change-password-secret-key
+          RESEND_API_KEY=re_test_ci_key
+          EMAIL_VERIFICATION_URL=http://localhost:3000/photographer/verify-email
+          REDIS_URL=redis://127.0.0.1:6379
+          REQUEST_RATE_LIMIT_MAX=5
+          REQUEST_RATE_LIMIT_WINDOW_SECONDS=60
+          AZURE_STORAGE_CONNECTION_STRING=DefaultEndpointsProtocol=https;AccountName=test;AccountKey=dGVzdA==;EndpointSuffix=core.windows.net
+          AZURE_STORAGE_CONTAINER_NAME=photographer-profile-picture
+          AZURE_STORAGE_PUBLIC_BASE_URL=https://test.blob.core.windows.net/photographer-profile-picture
+          APP_PORT=3000
+          SWAGGER_SERVER_URL=http://localhost:3000
+          EOF
+
+      - name: Start MySQL and Redis
+        run: docker compose up -d --wait mysql_database_test redis
+
+      - name: Prisma migrate deploy
+        run: npm run test:migrate
+
+      - name: Integration tests
+        run: npm run test:integration
+
+      - name: Stop test services
+        if: always()
+        run: docker compose down

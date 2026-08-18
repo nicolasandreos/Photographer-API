@@ -1,0 +1,80 @@
+# Required GitHub secrets:
+#   AZURE_CREDENTIALS  — JSON do service principal (azure/login)
+#   ACR_USERNAME       — photographeraiacr
+#   ACR_PASSWORD       — senha admin do ACR
+name: CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: cd-production
+  cancel-in-progress: false
+
+env:
+  ACR_NAME: photographeraiacr
+  ACR_LOGIN_SERVER: photographeraiacr.azurecr.io
+  IMAGE_NAME: photographerai
+  CONTAINER_APP_NAME: photographer-container
+  RESOURCE_GROUP: photos-ai
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build, migrate and deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login Azure Container Registry
+        env:
+          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+        run: az acr login --name "$ACR_NAME" --username "$ACR_USERNAME" --password "$ACR_PASSWORD"
+
+      - name: Docker build
+        run: docker build -t "$ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }}" .
+
+      - name: Docker push
+        run: docker push "$ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }}"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma migrate deploy
+        run: |
+          DATABASE_URL=$(az containerapp show \
+            --name "$CONTAINER_APP_NAME" \
+            --resource-group "$RESOURCE_GROUP" \
+            --query "properties.template.containers[0].env[?name=='DATABASE_URL'].value" \
+            -o tsv)
+          echo "::add-mask::$DATABASE_URL"
+          export DATABASE_URL
+          npx prisma migrate deploy
+
+      - name: Deploy to Azure Container Apps
+        run: |
+          az containerapp update \
+            --name "$CONTAINER_APP_NAME" \
+            --resource-group "$RESOURCE_GROUP" \
+            --image "$ACR_LOGIN_SERVER/$IMAGE_NAME:${{ github.sha }}"

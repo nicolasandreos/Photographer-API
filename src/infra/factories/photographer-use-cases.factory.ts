@@ -6,7 +6,6 @@ import { UpdatePhotographerUseCase } from "../../application/use-cases/update-ph
 import { IPhotographerRepository } from "../../domain/repositories/photographer";
 import { PasswordService } from "../adapters/password-service";
 import { PrismaPhotographerRepository } from "../adapters/prisma-photographer";
-import { EmailNotificationAdapter } from "../adapters/email-notifier";
 import { IPasswordService } from "../../application/ports/password-service";
 import { LoginPhotographerUseCase } from "../../application/use-cases/login-photographer";
 import { JwtTokenService } from "../adapters/jwt-token-service";

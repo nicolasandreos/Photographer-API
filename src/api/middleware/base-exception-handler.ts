@@ -3,7 +3,7 @@ import { MulterError } from "multer";
 import { BaseApiException } from "../../exceptions/base-exception"
 import { ZodError } from "zod";
 
-export const BaseApiExceptionHandler = (err: BaseApiException | ZodError | MulterError, req: Request, res: Response, next: NextFunction) => {
+export const BaseApiExceptionHandler = (err: BaseApiException | ZodError | MulterError, req: Request, res: Response, _next: NextFunction) => {
     if (err instanceof BaseApiException) {
         res.status(err.statusCode).json({
             success: false,

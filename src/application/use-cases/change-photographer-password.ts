@@ -1,7 +1,6 @@
-import { ChangePhotographerPasswordRequestDTO } from "../../api/dto/request/photographer/change-password";
 import { IPasswordService } from "../ports/password-service";
 import { IPhotographerRepository } from "../../domain/repositories/photographer";
-import { InvalidPasswordException, NewPasswordCannotBeTheSameAsTheOldPasswordException, NewPasswordDoesNotMatchException, PhotographerEmailIsNotValidException, PhotographerNotFoundException } from "../../exceptions/photographer";
+import { NewPasswordDoesNotMatchException, PhotographerEmailIsNotValidException, PhotographerNotFoundException } from "../../exceptions/photographer";
 import { PhotographerEntity } from "../../domain/entities/photographer";
 import { ITokenService } from "../ports/token-service";
 

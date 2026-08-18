@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { JwtTokenService } from "../../../infra/adapters/jwt-token-service";
 import {
   InvalidTokenException,

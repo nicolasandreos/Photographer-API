@@ -6,7 +6,6 @@ import { PhotographerMapperDTO } from "../mappers/photographer-mapper";
 import { createPhotographerRequestSchema } from "../dto/request/photographer/create";
 import { updatePhotographerRequestSchema } from "../dto/request/photographer/update";
 import { loginPhotographerRequestSchema } from "../dto/request/photographer/login";
-import { changePhotographerPasswordRequestSchema } from "../dto/request/photographer/change-password";
 import { AuthenticatedRequest } from "../middleware/auth";
 import {
   PhotographerEmailAlreadyVerifiedException,

@@ -2,7 +2,21 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    setupFiles: ["./src/tests/integration/setup.ts"],
     fileParallelism: false,
+    projects: [
+      {
+        test: {
+          name: "unit",
+          include: ["src/tests/unit/**/*.test.ts"],
+        },
+      },
+      {
+        test: {
+          name: "integration",
+          include: ["src/tests/integration/**/*.test.ts"],
+          setupFiles: ["./src/tests/integration/setup.ts"],
+        },
+      },
+    ],
   },
 });

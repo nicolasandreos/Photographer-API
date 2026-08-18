@@ -27,6 +27,13 @@ services:
     volumes:
       - mysql_volume_test:/var/lib/mysql
 
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
   redis:
     image: redis:7-alpine
     container_name: redis_database
@@ -35,6 +42,11 @@ services:
     volumes:
       - redis_volume:/data
     command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
 volumes:
   mysql_volume:
