@@ -1,0 +1,17 @@
+.git
+.github
+.vscode
+.cursor
+.azure
+node_modules
+generated
+coverage
+dist
+.env
+.env.*
+*.md
+docker-compose.yml
+src/tests
+**/vitest.config.ts
+**/*.test.ts
+sendEmailTest.ts

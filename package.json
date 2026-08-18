@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/main.ts",
+    "start": "node --import tsx src/main.ts",
+    "start:worker": "node --import tsx src/workers/email.worker.ts",
     "email:worker": "npx tsx src/workers/email.worker.ts",
     "postinstall": "prisma generate",
     "db:seed": "prisma db seed",

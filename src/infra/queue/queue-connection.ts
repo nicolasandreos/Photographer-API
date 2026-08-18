@@ -1,4 +1,6 @@
+export const BULLMQ_PREFIX = "{email}";
+
 export const bullmqConnection = {
     url: process.env.REDIS_URL,
-    maxRetriesPerRequest: null
-}
+    maxRetriesPerRequest: null as null,
+};

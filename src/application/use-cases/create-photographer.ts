@@ -63,6 +63,7 @@ export class CreatePhotographerUseCase {
       await this.emailNotifier.sendConfirmationEmailNotification(emailNotifierProps);
       return createdPhotographerEntity;
     } catch (error) {
+      console.error("Photographer creation failed:", error);
       throw new PhotographerCreationFailedException();
     }
   }

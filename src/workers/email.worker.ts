@@ -1,6 +1,6 @@
 import { Job, Worker } from "bullmq";
 import { EmailNotificationAdapter } from "../infra/adapters/email-notifier";
-import { bullmqConnection } from "../infra/queue/queue-connection";
+import { BULLMQ_PREFIX, bullmqConnection } from "../infra/queue/queue-connection";
 import { config } from "dotenv";
 
 config({ path: ".env" });
@@ -22,7 +22,7 @@ const worker = new Worker("email",
 
         throw new Error(`Unknown job name: ${job.name}`);
     },
-    { connection: bullmqConnection }
+    { connection: bullmqConnection, prefix: BULLMQ_PREFIX }
 );
 
 worker.on("completed", (job) => console.log(`Email job ${job.id} done`));
