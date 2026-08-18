@@ -1,6 +1,6 @@
-# LensFlow
+# Photographer API
 
-TypeScript backend for photographer accounts, built with hexagonal architecture.
+TypeScript backend for photographer and administrator accounts, built with hexagonal architecture.
 
 [![CI](https://github.com/nicolasandreos/Photographer-API/actions/workflows/ci.yml/badge.svg)](https://github.com/nicolasandreos/Photographer-API/actions/workflows/ci.yml)
 ![Node.js](https://img.shields.io/badge/Node.js-22-339933?logo=nodedotjs&logoColor=white)
@@ -10,12 +10,18 @@ TypeScript backend for photographer accounts, built with hexagonal architecture.
 ![Redis](https://img.shields.io/badge/Redis-BullMQ-DC382D?logo=redis&logoColor=white)
 ![Vitest](https://img.shields.io/badge/Tests-Vitest-6E9F18?logo=vitest&logoColor=white)
 
-LensFlow is the API behind a photography-studio SaaS: photographers register, verify email, sign in, and manage a profile. The domain stays independent of Express, Prisma, Redis, Resend, and Azure, so those details can change without rewriting business rules.
+This API lets photographers register, verify email, sign in, update a profile, and upload a profile picture. Administrators can be created, log in, and list photographers. Business rules live in use cases; Express, Prisma, Redis, Resend, and Azure Blob Storage are adapters behind ports.
 
-This repository is the **identity, auth, and profile** slice of that product. CRM, scheduling, and AI automation are on the roadmap — they are not implemented here.
+What is in the repo today:
 
-- Interactive API docs: `GET /docs`
-- Health check: `GET /health`
+- JWT access and refresh tokens, plus dedicated tokens for email verification and password reset
+- Outbound email through **Resend** and React Email, produced by the API and consumed by a **BullMQ** worker on **Redis**
+- Login rate limiting on Redis
+- Profile pictures in **Azure Blob Storage**
+- **Prisma** on MySQL, with Docker Compose for local MySQL and Redis
+- **CI** (lint, typecheck, unit + integration tests) and **CD** (Docker image to Azure Container Registry, Prisma migrate, Azure Container Apps)
+
+Interactive API docs: `GET /docs`. Health check: `GET /health`.
 
 ## Table of contents
 
@@ -29,7 +35,6 @@ This repository is the **identity, auth, and profile** slice of that product. CR
 - [API surface](#api-surface)
 - [Tests](#tests)
 - [CI/CD](#cicd)
-- [Roadmap](#roadmap)
 
 ## Features
 
@@ -196,7 +201,7 @@ If the request is allowed, the use case requires a verified email, checks bcrypt
 
 ### Prisma and MySQL
 
-Schema: [`prisma/schema.prisma`](prisma/schema.prisma). Two models, no relations yet:
+Schema: [`prisma/schema.prisma`](prisma/schema.prisma). Two models:
 
 - `photographers` — UUID, unique email, password hash, phone, optional studio name, `isActive`, `emailVerified`, optional profile blob name
 - `administrator_users` — UUID, unique email, password hash
@@ -233,7 +238,7 @@ npm run start:worker
 
 The API also serves HTML pages for verification success and the change-password form (those are not Resend templates).
 
-### Auth and storage
+### Auth
 
 Four JWT secrets, four lifetimes:
 
@@ -246,7 +251,17 @@ Four JWT secrets, four lifetimes:
 
 Protected routes expect `Authorization: Bearer <access-token>`. Listing all photographers also requires the caller to exist as an administrator.
 
-Profile pictures go to Azure Blob Storage. Multer accepts a `photo` field up to 5 MB; the use case allows `jpg`, `jpeg`, and `png` only. The blob name is stored on the photographer; public URLs are built from `AZURE_STORAGE_PUBLIC_BASE_URL`.
+### Azure Blob Storage
+
+`PUT /photographer/me/profile-picture` (authenticated) is the upload path:
+
+1. Multer reads a multipart field named `photo` into memory (max **5 MB**).
+2. `UploadPhotographerProfilePhotoUseCase` accepts only `jpg`, `jpeg`, and `png`.
+3. `AzureStorageAdapter` (`IUploadFile`) uploads the buffer with `@azure/storage-blob` using `AZURE_STORAGE_CONNECTION_STRING` and `AZURE_STORAGE_CONTAINER_NAME`.
+4. The returned blob name is stored on `photographers.profile_picture_blob_name`.
+5. Public URLs are built from `AZURE_STORAGE_PUBLIC_BASE_URL` plus that blob name.
+
+Without those Azure variables, registration and login still work; profile-picture upload fails at the adapter.
 
 ## Getting started
 
@@ -395,22 +410,31 @@ npm run test:integration
 
 ## CI/CD
 
-**CI** (every push and pull request): lint → typecheck → unit tests → start MySQL test + Redis via Compose → Prisma migrate → integration tests.
+Workflows live in [`.github/workflows/`](.github/workflows/).
 
-**CD** (push to `main`): build a Docker image, push it to Azure Container Registry, run `prisma migrate deploy` against the production database, and update an Azure Container App. Secrets stay in GitHub Actions and Azure — they are not in this repository.
+**CI** (`.github/workflows/ci.yml`) runs on every push and pull request:
 
-The API container and the email worker are separate processes. Production needs both if you want outbound email.
+1. `npm ci`
+2. Lint (`eslint`)
+3. Typecheck (`tsc --noEmit`)
+4. Unit tests (no live services)
+5. Write a temporary `.env.test`
+6. `docker compose up` for the **test** MySQL (port 3311) and Redis
+7. `prisma migrate deploy` against that database
+8. Integration tests (HTTP + Prisma + Redis)
 
-## Roadmap
+**CD** (`.github/workflows/cd.yml`) runs on push to `main`:
 
-Not implemented in this codebase. Planned for the LensFlow product:
+1. Authenticate to Azure with GitHub secrets
+2. Log in to Azure Container Registry
+3. Build the multi-stage Node 22 image from the `Dockerfile` (healthcheck on `/health`)
+4. Push the image tagged with the git SHA
+5. Run `prisma migrate deploy` using the production `DATABASE_URL` from the Container App
+6. Update the Azure Container App to the new image
 
-- Lead and client CRM (WhatsApp, Instagram, and other inbound channels)
-- Scheduling, quotes, contracts, and payments
-- Photo delivery after the shoot
-- AI assistance: lead extraction, conversation summaries, and photographer-specific FAQs
+Secrets stay in GitHub Actions and Azure. They are not in this repository.
 
-The current backend is the foundation those modules can plug into through the same ports-and-adapters boundary.
+The Docker image starts the HTTP API (`src/main.ts`) only. The email worker is a second process (`npm run start:worker`). Outbound Resend mail needs that worker running in the environment as well.
 
 ## Author
 

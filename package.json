@@ -1,5 +1,5 @@
 {
-  "name": "lensflow",
+  "name": "photographer-api",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
@@ -20,7 +20,7 @@
   },
   "author": "Nicolas Andreos",
   "license": "ISC",
-  "description": "LensFlow backend: hexagonal TypeScript API for photographer accounts, auth, and email workflows.",
+  "description": "Hexagonal TypeScript API for photographer accounts: JWT auth, Resend email, Azure Blob, Redis queue and rate limit.",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/bcrypt": "^6.0.0",
