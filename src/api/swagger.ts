@@ -1,6 +1,14 @@
 import swaggerJsdoc from "swagger-jsdoc";
+import { config } from "dotenv";
+import { AppException } from "../exceptions/app";
 
-const port = process.env.APP_PORT ?? "3000";
+config({ path: ".env" });
+config({ path: ".env.development" });
+
+const serverUrl = process.env.SWAGGER_SERVER_URL;
+if (!serverUrl) {
+    throw new AppException("SWAGGER_SERVER_URL environment variable is not set");
+}
 
 export const swaggerSpec = swaggerJsdoc({
     definition: {
@@ -9,7 +17,7 @@ export const swaggerSpec = swaggerJsdoc({
             title: "photos-ai",
             version: "1.0.0",
         },
-        servers: [{ url: `http://localhost:${port}` }],
+        servers: [{ url: serverUrl }],
         components: {
             securitySchemes: {
                 bearerAuth: {
